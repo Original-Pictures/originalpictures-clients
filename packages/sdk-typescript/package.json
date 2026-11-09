@@ -1,0 +1,70 @@
+{
+  "name": "@originalpictures/sdk",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "TypeScript SDK for C2PA Content Credentials: sign, invisibly watermark, fingerprint and verify media.",
+  "keywords": [
+    "c2pa",
+    "content-credentials",
+    "provenance",
+    "ai-watermarking",
+    "invisible-watermark",
+    "watermark",
+    "fingerprinting",
+    "perceptual-hash",
+    "verification",
+    "eu-ai-act",
+    "sb-942",
+    "ai-labeling",
+    "sdk",
+    "api-client",
+    "typescript"
+  ],
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Original Pictures Technologies, Inc.",
+    "email": "hello@originalpictures.com",
+    "url": "https://originalpictures.com"
+  },
+  "homepage": "https://docs.originalpictures.com/sdk/typescript/",
+  "bugs": {
+    "url": "https://github.com/Original-Pictures/originalpictures-clients/issues",
+    "email": "hello@originalpictures.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Original-Pictures/originalpictures-clients.git",
+    "directory": "packages/sdk-typescript"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "pnpm run build && node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "@noble/hashes": "2.2.0"
+  },
+  "devDependencies": {
+    "@op/eslint-config": "workspace:*",
+    "@op/typescript-config": "workspace:*",
+    "eslint": "10.8.0",
+    "typescript": "6.0.3"
+  }
+}

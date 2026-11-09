@@ -1,0 +1,12 @@
+{
+  "extends": "@op/typescript-config/base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "outDir": "dist/types",
+    "rootDir": "src"
+  },
+  "include": ["src"]
+}

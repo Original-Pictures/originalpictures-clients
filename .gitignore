@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.build/
+
+# Node / TypeScript
+node_modules/
+*.tsbuildinfo
+coverage/
+npm-dist/
+
+# Local secrets (never committed)
+.env
+.env.*
+*.pem
+*.key

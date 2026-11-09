@@ -1,0 +1,97 @@
+{
+  "name": "Original Pictures",
+  "description": "Signs media with C2PA Content Credentials (optionally with an invisible watermark, server-side fingerprints or an AI-generation declaration), reports what a file's Content Credentials declare about its origin, and returns the drafted AI-disclosure rules for a jurisdiction and content type. Each skill runs the same service, scopes, billing and rate limits as the Original Pictures REST API; authenticate with an API key as a bearer token. Verification states declared origin only, never whether content is real.",
+  "supportedInterfaces": [
+    {
+      "url": "https://dev-api.originalpictures.com/a2a",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    },
+    {
+      "url": "https://dev-api.originalpictures.com/a2a",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "0.3"
+    }
+  ],
+  "provider": {
+    "organization": "Original Pictures Technologies, Inc.",
+    "url": "https://originalpictures.com"
+  },
+  "version": "1.0.0",
+  "documentationUrl": "https://docs.originalpictures.com/api/a2a/",
+  "iconUrl": "https://originalpictures.com/favicon-512x512.png",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "extendedAgentCard": false
+  },
+  "securitySchemes": {
+    "apiKey": {
+      "httpAuthSecurityScheme": {
+        "scheme": "Bearer",
+        "bearerFormat": "opk_",
+        "description": "An Original Pictures API key (opk_...) created in the console, sent as Authorization: Bearer. Server-side only; each skill needs the scopes its REST operation needs."
+      },
+      "type": "http",
+      "scheme": "bearer"
+    }
+  },
+  "securityRequirements": [
+    {
+      "schemes": {
+        "apiKey": {
+          "list": []
+        }
+      }
+    }
+  ],
+  "defaultInputModes": ["application/json", "text/plain"],
+  "defaultOutputModes": ["application/json", "text/plain"],
+  "skills": [
+    {
+      "id": "sign",
+      "name": "Sign media with Content Credentials",
+      "description": "Signs one image, audio or video file with a C2PA manifest, as POST /v1/sign. Send the file inline (at most 25 MB; needs the uploads:write scope too) or a data part naming an uploaded asset_id, plus watermark, fingerprint and ai_declaration options (an AI declaration is sign-only: watermark false). Needs sign:write. The task is the sign job; when it completes, the artifact carries a time-limited download link (needs assets:read).",
+      "tags": ["c2pa", "content-credentials", "provenance", "watermark", "signing"],
+      "examples": [
+        "Sign this photo with Content Credentials only.",
+        "{\"asset_id\": \"ast_abcdefghijklmnop\", \"watermark\": false, \"fingerprint\": true, \"ai_declaration\": {\"digital_source_type\": \"trainedAlgorithmicMedia\", \"software_agent_name\": \"Studio Nova Imagine\"}}"
+      ],
+      "inputModes": ["application/json", "image/*", "audio/*", "video/*"],
+      "outputModes": ["application/json", "image/*", "audio/*", "video/*"]
+    },
+    {
+      "id": "verify",
+      "name": "Report a file's declared origin",
+      "description": "Verifies one file's C2PA Content Credentials, as POST /v1/verifications, and summarises what they declare: the credential status (valid, valid_untrusted, invalid or absent) and the declared signer, generator, AI-generation declaration and actions. Send the file inline (at most 25 MB; needs uploads:write too) or a data part naming a stored object_id. Needs verify:write. Remote URLs are not fetched. It is never a judgement of whether content is real.",
+      "tags": ["c2pa", "verification", "content-credentials", "provenance"],
+      "examples": [
+        "What does this image's Content Credentials say about where it came from?",
+        "{\"object_id\": \"aob_abcdefghijklmnop\"}"
+      ],
+      "inputModes": ["application/json", "image/*", "audio/*", "video/*"],
+      "outputModes": ["application/json", "text/plain"]
+    },
+    {
+      "id": "disclosure-policy",
+      "name": "AI-disclosure rules for a jurisdiction",
+      "description": "Returns the drafted AI-disclosure rules (provision, trigger, timing, form and notice text) for a jurisdiction (EU, US-CA, US-ME, US-NH, US-NY, US-UT, IN, CN or KR) and a content type (image, video, audio, text or interaction), from the published disclosure policy. Draft text pending legal review: showing a notice does not by itself satisfy any law.",
+      "tags": ["ai-disclosure", "transparency", "ai-act", "labelling"],
+      "examples": [
+        "Which AI disclosure applies to generated images in the EU?",
+        "{\"jurisdiction\": \"US-CA\", \"content_type\": \"video\"}"
+      ],
+      "inputModes": ["application/json", "text/plain"],
+      "outputModes": ["application/json", "text/plain"]
+    }
+  ],
+  "protocolVersion": "0.3.0",
+  "url": "https://dev-api.originalpictures.com/a2a",
+  "preferredTransport": "JSONRPC",
+  "security": [
+    {
+      "apiKey": []
+    }
+  ],
+  "supportsAuthenticatedExtendedCard": false
+}

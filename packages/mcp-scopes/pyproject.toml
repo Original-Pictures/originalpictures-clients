@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling==1.31.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "originalpictures-mcp-scopes"
+version = "1.0.0"
+description = "Versioned scope vocabulary for the Original Pictures MCP server (C2PA signing and verification)."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "Original Pictures Technologies, Inc.", email = "hello@originalpictures.com" }]
+keywords = [
+  "c2pa",
+  "content-credentials",
+  "mcp",
+  "model-context-protocol",
+  "scopes",
+  "ai-agents",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://originalpictures.com"
+Documentation = "https://docs.originalpictures.com/integrations/mcp-remote/"
+Repository = "https://github.com/Original-Pictures/originalpictures-clients"
+Issues = "https://github.com/Original-Pictures/originalpictures-clients/issues"
+Pricing = "https://originalpictures.com/pricing/"
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "README.md", "LICENSE"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/originalpictures_mcp_scopes"]

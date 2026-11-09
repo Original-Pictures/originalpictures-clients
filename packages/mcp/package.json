@@ -1,0 +1,12 @@
+{
+  "name": "@originalpictures/mcp-python-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Turbo wrapper for the Original Pictures FastMCP server.",
+  "scripts": {
+    "build": "uv build --directory ../.. --package originalpictures-mcp --out-dir packages/mcp/.build",
+    "typecheck": "uv run --frozen --directory ../.. --package originalpictures-mcp mypy packages/mcp/src",
+    "lint": "uv run --frozen --directory ../.. --package originalpictures-mcp ruff check packages/mcp",
+    "test": "uv run --frozen --directory ../.. --package originalpictures-mcp pytest packages/mcp"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@originalpictures/sdk-python-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Turbo wrapper for the Original Pictures Python SDK. Declares no runtime JS deps.",
+  "scripts": {
+    "typecheck": "uv run --frozen --directory ../.. --package originalpictures-sdk mypy packages/sdk-python/src packages/sdk-python/tests/readme_example.py",
+    "lint": "uv run --frozen --directory ../.. --package originalpictures-sdk ruff check packages/sdk-python",
+    "test": "uv run --frozen --directory ../.. --package originalpictures-sdk pytest packages/sdk-python"
+  }
+}

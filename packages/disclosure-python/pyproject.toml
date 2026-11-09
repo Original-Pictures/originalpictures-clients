@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling==1.31.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "originalpictures-disclosure"
+version = "0.1.0"
+description = "AI disclosure rules (EU AI Act Article 50, California SB 942) and tamper-evident evidence logging."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "Original Pictures Technologies, Inc.", email = "hello@originalpictures.com" }]
+keywords = [
+  "ai-disclosure",
+  "ai-labeling",
+  "eu-ai-act",
+  "ai-act-article-50",
+  "sb-942",
+  "transparency",
+  "content-credentials",
+  "c2pa",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
+]
+dependencies = ["httpx==0.28.1"]
+
+[project.urls]
+Homepage = "https://originalpictures.com"
+Documentation = "https://docs.originalpictures.com/api/disclosures/"
+Repository = "https://github.com/Original-Pictures/originalpictures-clients"
+Issues = "https://github.com/Original-Pictures/originalpictures-clients/issues"
+Pricing = "https://originalpictures.com/pricing/"
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "README.md", "LICENSE"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/originalpictures_disclosure"]

@@ -1,0 +1,11 @@
+{
+  "name": "@originalpictures/disclosure-python-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Turbo wrapper for the Original Pictures Python disclosure mirror. Declares no runtime JS deps.",
+  "scripts": {
+    "typecheck": "uv run --frozen --directory ../.. --package originalpictures-disclosure mypy packages/disclosure-python/src",
+    "lint": "uv run --frozen --directory ../.. --package originalpictures-disclosure ruff check packages/disclosure-python",
+    "test": "uv run --frozen --directory ../.. --package originalpictures-disclosure pytest packages/disclosure-python"
+  }
+}

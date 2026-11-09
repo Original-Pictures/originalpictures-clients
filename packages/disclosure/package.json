@@ -1,0 +1,91 @@
+{
+  "name": "@originalpictures/disclosure",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "AI disclosure labels and notices for the EU AI Act Article 50 and California SB 942, with evidence logging.",
+  "keywords": [
+    "ai-disclosure",
+    "ai-label",
+    "ai-labeling",
+    "eu-ai-act",
+    "ai-act-article-50",
+    "sb-942",
+    "transparency",
+    "web-component",
+    "chatbot-disclosure",
+    "content-credentials",
+    "c2pa"
+  ],
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Original Pictures Technologies, Inc.",
+    "email": "hello@originalpictures.com",
+    "url": "https://originalpictures.com"
+  },
+  "homepage": "https://docs.originalpictures.com/api/disclosures/",
+  "bugs": {
+    "url": "https://github.com/Original-Pictures/originalpictures-clients/issues",
+    "email": "hello@originalpictures.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Original-Pictures/originalpictures-clients.git",
+    "directory": "packages/disclosure"
+  },
+  "sideEffects": [
+    "./src/index.ts",
+    "./dist/index.js",
+    "./dist/disclosure.iife.js"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./core": {
+      "types": "./src/core.ts",
+      "default": "./src/core.ts"
+    },
+    "./iife": "./dist/disclosure.iife.js",
+    "./policy.json": "./assets/policy/op.disclosure-policy.2026-10.v1.json",
+    "./badges/*": "./assets/badges/*"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/types/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "./core": {
+        "types": "./dist/types/core.d.ts",
+        "import": "./dist/core.js"
+      },
+      "./iife": "./dist/disclosure.iife.js",
+      "./policy.json": "./dist/policy/op.disclosure-policy.2026-10.v1.json",
+      "./badges/*": "./dist/badges/*"
+    }
+  },
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "node scripts/build.mjs && vitest run"
+  },
+  "devDependencies": {
+    "@op/eslint-config": "workspace:*",
+    "@op/typescript-config": "workspace:*",
+    "@types/node": "26.1.2",
+    "esbuild": "0.28.2",
+    "eslint": "10.8.0",
+    "happy-dom": "21.0.4",
+    "typescript": "6.0.3",
+    "vitest": "4.1.12"
+  }
+}

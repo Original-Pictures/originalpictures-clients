@@ -1,0 +1,12 @@
+{
+  "name": "@originalpictures/cli-python-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Turbo wrapper for the Original Pictures Python CLI.",
+  "scripts": {
+    "build": "uv build --directory ../.. --package originalpictures-cli --out-dir packages/cli-python/.build",
+    "typecheck": "uv run --frozen --directory ../.. --package originalpictures-cli mypy packages/cli-python/src",
+    "lint": "uv run --frozen --directory ../.. --package originalpictures-cli ruff check packages/cli-python",
+    "test": "uv run --frozen --directory ../.. --package originalpictures-cli pytest packages/cli-python"
+  }
+}

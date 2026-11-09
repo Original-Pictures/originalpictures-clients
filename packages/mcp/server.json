@@ -1,0 +1,67 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.originalpictures/mcp",
+  "title": "Original Pictures",
+  "description": "MCP server: sign media with C2PA Content Credentials, add invisible watermarks, verify origin.",
+  "version": "0.1.0",
+  "websiteUrl": "https://docs.originalpictures.com",
+  "repository": {
+    "url": "https://github.com/Original-Pictures/originalpictures-clients",
+    "source": "github",
+    "subfolder": "packages/mcp"
+  },
+  "packages": [
+    {
+      "registryType": "pypi",
+      "registryBaseUrl": "https://pypi.org",
+      "identifier": "originalpictures-mcp",
+      "version": "0.1.0",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "ORIGINALPICTURES_API_KEY",
+          "description": "Original Pictures API key (server-side secret).",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "ORIGINALPICTURES_MCP_SCOPES",
+          "description": "Comma-separated tool scope allowlist. No tool is enabled until it is listed here; sign:write and verify:write enable the billable tools.",
+          "isRequired": true,
+          "default": "assets:read,jobs:read,recipes:read,verifications:read"
+        },
+        {
+          "name": "ORIGINALPICTURES_API_BASE_URL",
+          "description": "Original Pictures API origin. Defaults to https://dev-api.originalpictures.com.",
+          "isRequired": false,
+          "default": "https://dev-api.originalpictures.com"
+        }
+      ]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://dev-api.originalpictures.com/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer followed by an Original Pictures API key (opk_...). Use a dedicated key with only the scopes the client needs; sign:write and verify:write enable the billable tools.",
+          "isRequired": true,
+          "isSecret": true,
+          "value": "Bearer {api_key}",
+          "variables": {
+            "api_key": {
+              "description": "Original Pictures API key (opk_...).",
+              "isRequired": true,
+              "isSecret": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+# One pnpm workspace over the client packages. Each Python package also carries a
+# tiny private package.json wrapper (its `uv run --package ...` scripts); those
+# declare no JS dependencies. @op/typescript-config and @op/eslint-config are
+# private build/lint configuration, never published.
+packages:
+  - "packages/*"
+
+# esbuild ships working prebuilt binaries through its platform optional
+# dependencies, so its install script is deliberately not run.
+allowBuilds:
+  esbuild: false
+
+# Supply-chain quarantine: new registry releases cool for 24 hours.
+minimumReleaseAge: 1440
+
+# Security-fixed transitive releases carried over from the source repository's
+# reviewed overrides, limited to packages in this workspace's graph.
+overrides:
+  "brace-expansion@5.0.7": "5.0.12"
+  "brace-expansion@5.0.9": "5.0.12"
+  "undici@>=8 <8.12.2": "8.12.3"
+  "vite@8.1.5": "8.1.6"
+  "happy-dom@<21.0.4": "21.0.4"

@@ -1,0 +1,38 @@
+# Smithery listing for the Original Pictures MCP server (prepared 2026-10-19, not submitted).
+# Format: Smithery's classic local-STDIO `startCommand` (verify against Smithery's current
+# documentation before submitting; see docs/distribution/sdk-visibility.md, step 6).
+# It launches the PyPI package, so it works only after `originalpictures-mcp` is published.
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required:
+      - apiKey
+    properties:
+      apiKey:
+        type: string
+        description: Original Pictures API key (opk_...). A server-side secret.
+      scopes:
+        type: string
+        default: assets:read,jobs:read,recipes:read,verifications:read
+        description: >-
+          Comma-separated tool scope allowlist. No tool is enabled until it is listed here;
+          sign:write and verify:write enable the billable tools.
+      apiBaseUrl:
+        type: string
+        default: https://dev-api.originalpictures.com
+        description: Original Pictures API origin.
+  commandFunction: |-
+    (config) => ({
+      command: 'uvx',
+      args: ['originalpictures-mcp'],
+      env: {
+        ORIGINALPICTURES_API_KEY: config.apiKey,
+        ORIGINALPICTURES_MCP_SCOPES: config.scopes ?? 'assets:read,jobs:read,recipes:read,verifications:read',
+        ORIGINALPICTURES_API_BASE_URL: config.apiBaseUrl ?? 'https://dev-api.originalpictures.com',
+      },
+    })
+  exampleConfig:
+    apiKey: opk_your-key
+    scopes: assets:read,jobs:read,recipes:read,verifications:read
+    apiBaseUrl: https://dev-api.originalpictures.com

@@ -1,0 +1,751 @@
+{
+  "schema_version": "op.disclosure-policy.2026-10.v1",
+  "policy_version": "2026-10-19.2",
+  "published_at": "2026-10-19T00:00:00Z",
+  "needs_legal_review": true,
+  "disclaimer": "Draft rule text for owner and legal review. Showing a notice does not by itself satisfy any law.",
+  "jurisdictions": [
+    {
+      "id": "EU",
+      "name": "European Union",
+      "instruments": [
+        {
+          "id": "eu-ai-act",
+          "title": "Regulation (EU) 2024/1689 (Artificial Intelligence Act)",
+          "citation": "Art. 50(1), 50(2), 50(4), 50(5); application date in Art. 113",
+          "url": "https://eur-lex.europa.eu/eli/reg/2024/1689/oj",
+          "status": "in_force",
+          "applies_from": "2026-08-02"
+        }
+      ],
+      "rules": [
+        {
+          "id": "eu.art50.1.ai-interaction",
+          "kind": "ai_interaction_notice",
+          "instrument": "eu-ai-act",
+          "provision": "Art. 50(1), with the form set by Art. 50(5)",
+          "obligated_party": "provider",
+          "trigger": "An AI system is intended to interact directly with natural persons.",
+          "timing": "at_first_interaction",
+          "form": "Clear and distinguishable, at the latest at the time of the first interaction, and meeting the applicable accessibility requirements (Art. 50(5)).",
+          "texts": [
+            {
+              "locale": "en",
+              "text": "You are chatting with an AI system."
+            },
+            {
+              "locale": "de",
+              "text": "Sie chatten mit einem KI-System."
+            },
+            {
+              "locale": "fr",
+              "text": "Vous discutez avec un système d'IA."
+            },
+            {
+              "locale": "es",
+              "text": "Está chateando con un sistema de IA."
+            },
+            {
+              "locale": "it",
+              "text": "Stai chattando con un sistema di IA."
+            },
+            {
+              "locale": "nl",
+              "text": "U chat met een AI-systeem."
+            },
+            {
+              "locale": "pl",
+              "text": "Rozmawiasz z systemem AI."
+            }
+          ],
+          "badge_set": "ai-interaction",
+          "exceptions": [
+            "It is obvious to a reasonably well-informed, observant and circumspect person, taking into account the circumstances and the context of use.",
+            "AI systems authorised by law to detect, prevent, investigate or prosecute criminal offences, subject to safeguards, unless available for the public to report a criminal offence."
+          ],
+          "needs_legal_review": true
+        },
+        {
+          "id": "eu.art50.2.machine-readable-marking",
+          "kind": "machine_readable_marking",
+          "instrument": "eu-ai-act",
+          "provision": "Art. 50(2)",
+          "obligated_party": "provider",
+          "trigger": "An AI system, including a general-purpose AI system, generates synthetic audio, image, video or text content.",
+          "timing": "on_publication",
+          "form": "Outputs are marked in a machine-readable format and detectable as artificially generated or manipulated, using solutions that are effective, interoperable, robust and reliable as far as technically feasible.",
+          "texts": [],
+          "badge_set": null,
+          "exceptions": [
+            "The AI system performs an assistive function for standard editing.",
+            "The AI system does not substantially alter the input data provided by the deployer or its semantics.",
+            "Use authorised by law to detect, prevent, investigate or prosecute criminal offences."
+          ],
+          "needs_legal_review": true
+        },
+        {
+          "id": "eu.art50.4.deep-fake",
+          "kind": "deepfake_label",
+          "instrument": "eu-ai-act",
+          "provision": "Art. 50(4), first subparagraph, with the form set by Art. 50(5)",
+          "obligated_party": "deployer",
+          "trigger": "An AI system generates or manipulates image, audio or video content constituting a deep fake.",
+          "timing": "on_display",
+          "form": "Disclose that the content has been artificially generated or manipulated, clearly and distinguishably, at the latest at the time of the first exposure, and accessibly (Art. 50(5)).",
+          "texts": [
+            {
+              "locale": "en",
+              "text": "This content has been artificially generated or manipulated."
+            },
+            {
+              "locale": "de",
+              "text": "Dieser Inhalt wurde künstlich erzeugt oder manipuliert."
+            },
+            {
+              "locale": "fr",
+              "text": "Ce contenu a été généré ou manipulé artificiellement."
+            },
+            {
+              "locale": "es",
+              "text": "Este contenido ha sido generado o manipulado artificialmente."
+            },
+            {
+              "locale": "it",
+              "text": "Questo contenuto è stato generato o manipolato artificialmente."
+            },
+            {
+              "locale": "nl",
+              "text": "Deze inhoud is kunstmatig gegenereerd of gemanipuleerd."
+            },
+            {
+              "locale": "pl",
+              "text": "Ta treść została sztucznie wygenerowana lub zmanipulowana."
+            }
+          ],
+          "badge_set": "ai-manipulated",
+          "exceptions": [
+            "Where the content forms part of an evidently artistic, creative, satirical, fictional or analogous work or programme, the obligation is limited to disclosing the existence of such generated or manipulated content in an appropriate manner that does not hamper the display or enjoyment of the work.",
+            "Use authorised by law to detect, prevent, investigate or prosecute criminal offences."
+          ],
+          "needs_legal_review": true
+        },
+        {
+          "id": "eu.art50.4.public-interest-text",
+          "kind": "visible_label",
+          "instrument": "eu-ai-act",
+          "provision": "Art. 50(4), second subparagraph, with the form set by Art. 50(5)",
+          "obligated_party": "deployer",
+          "trigger": "An AI system generates or manipulates text published with the purpose of informing the public on matters of public interest.",
+          "timing": "on_publication",
+          "form": "Disclose that the text has been artificially generated or manipulated, clearly and distinguishably, at the latest at the time of the first exposure, and accessibly (Art. 50(5)).",
+          "texts": [
+            {
+              "locale": "en",
+              "text": "This text was generated or manipulated by AI."
+            },
+            {
+              "locale": "de",
+              "text": "Dieser Text wurde mit KI erzeugt oder verändert."
+            },
+            {
+              "locale": "fr",
+              "text": "Ce texte a été généré ou modifié par l'IA."
+            },
+            {
+              "locale": "es",
+              "text": "Este texto ha sido generado o modificado mediante IA."
+            },
+            {
+              "locale": "it",
+              "text": "Questo testo è stato generato o modificato dall'IA."
+            },
+            {
+              "locale": "nl",
+              "text": "Deze tekst is met AI gegenereerd of bewerkt."
+            },
+            {
+              "locale": "pl",
+              "text": "Ten tekst został wygenerowany lub zmieniony przez AI."
+            }
+          ],
+          "badge_set": "ai-generated",
+          "exceptions": [
+            "The AI-generated content has undergone a process of human review or editorial control and a natural or legal person holds editorial responsibility for its publication.",
+            "Use authorised by law to detect, prevent, investigate or prosecute criminal offences."
+          ],
+          "needs_legal_review": true
+        }
+      ]
+    },
+    {
+      "id": "US-CA",
+      "name": "California",
+      "instruments": [
+        {
+          "id": "ca-sb942",
+          "title": "SB 942 (2024) California AI Transparency Act, as amended by AB 853 (2025) and SB 1000 (2026)",
+          "citation": "Bus. & Prof. Code § 22757 et seq. (§ 22757.2 disclosure verification tool; § 22757.3 latent disclosure)",
+          "url": "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202320240SB942",
+          "status": "amended",
+          "applies_from": "2026-08-02"
+        },
+        {
+          "id": "ca-sb1000",
+          "title": "SB 1000 (2026) amendments to the California AI Transparency Act",
+          "citation": "Urgency statute approved and filed 2026-09-30; amends Bus. & Prof. Code §§ 22757.1-22757.3",
+          "url": "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB1000",
+          "status": "in_force",
+          "applies_from": "2026-09-30"
+        },
+        {
+          "id": "ca-sb1001",
+          "title": "SB 1001 (2018) Bolstering Online Transparency (BOT) Act",
+          "citation": "Bus. & Prof. Code §§ 17940-17943",
+          "url": "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201720180SB1001",
+          "status": "in_force",
+          "applies_from": "2019-07-01"
+        }
+      ],
+      "rules": [
+        {
+          "id": "us-ca.sb942.latent-disclosure",
+          "kind": "machine_readable_marking",
+          "instrument": "ca-sb942",
+          "provision": "Bus. & Prof. Code § 22757.3(a)",
+          "obligated_party": "provider",
+          "trigger": "A covered provider (a person that creates, codes or otherwise produces a generative AI system publicly accessible in California; SB 1000 removed the 1,000,000 monthly user threshold)'s generative AI system creates or alters image, video or audio content.",
+          "timing": "on_publication",
+          "form": "Include a latent disclosure that conveys, to the extent technically feasible, the covered provider's name, the system's name and version, the time and date of creation or alteration, a unique identifier, and whether the generative AI system created or altered the content; detectable by the provider's disclosure verification tool and permanent or extraordinarily difficult to remove.",
+          "texts": [],
+          "badge_set": null,
+          "exceptions": [],
+          "needs_legal_review": true
+        },
+        {
+          "id": "us-ca.sb1000.disclosure-verification-tool",
+          "kind": "machine_readable_marking",
+          "instrument": "ca-sb942",
+          "provision": "Bus. & Prof. Code § 22757.2",
+          "obligated_party": "provider",
+          "trigger": "A covered provider (a person that creates, codes or otherwise produces a generative AI system publicly accessible in California; SB 1000 removed the 1,000,000 monthly user threshold) makes its generative AI system available.",
+          "timing": "on_request",
+          "form": "Make a disclosure verification tool available free of charge and publicly accessible (reasonable security limits allowed) that lets a person assess whether content was created or altered, other than by minor modification, by the provider's system and that outputs any system provenance data detected; it supports upload by URL and API access, collects no personal information unless the user consents, and may be a third-party tool the provider directs users to.",
+          "texts": [],
+          "badge_set": null,
+          "exceptions": [],
+          "needs_legal_review": true
+        },
+        {
+          "id": "us-ca.sb1001.bot-disclosure",
+          "kind": "ai_interaction_notice",
+          "instrument": "ca-sb1001",
+          "provision": "Bus. & Prof. Code § 17941",
+          "obligated_party": "operator",
+          "trigger": "A bot communicates or interacts online with a person in California to incentivize a purchase or sale of goods or services in a commercial transaction, or to influence a vote in an election.",
+          "timing": "at_first_interaction",
+          "form": "Clear, conspicuous and reasonably designed to inform the persons with whom the bot communicates or interacts that it is a bot.",
+          "texts": [
+            {
+              "locale": "en",
+              "text": "You are interacting with a bot, an automated AI system, not a person."
+            },
+            {
+              "locale": "es",
+              "text": "Está interactuando con un bot, un sistema automatizado de IA, no con una persona."
+            }
+          ],
+          "badge_set": "ai-interaction",
+          "exceptions": [
+            "The statute does not impose a duty on service providers of online platforms (§ 17942)."
+          ],
+          "needs_legal_review": true
+        }
+      ]
+    },
+    {
+      "id": "US-ME",
+      "name": "Maine",
+      "instruments": [
+        {
+          "id": "me-ld1727",
+          "title": "LD 1727 (132nd Legislature, 2025), An Act to Ensure Transparency in Consumer Transactions Involving Artificial Intelligence",
+          "citation": "LD 1727; enforced under the Maine Unfair Trade Practices Act (5 M.R.S. ch. 10)",
+          "url": "https://legislature.maine.gov/LawMakerWeb/summary.asp?paper=HP1154&snum=132",
+          "status": "in_force",
+          "applies_from": null
+        }
+      ],
+      "rules": [
+        {
+          "id": "us-me.ld1727.chatbot-disclosure",
+          "kind": "ai_interaction_notice",
+          "instrument": "me-ld1727",
+          "provision": "LD 1727",
+          "obligated_party": "operator",
+          "trigger": "An AI chatbot or other computer technology engages with a consumer in trade or commerce in a way that may mislead or deceive a reasonable consumer into believing they are engaging with a human being.",
+          "timing": "at_first_interaction",
+          "form": "Notify the consumer in a clear and conspicuous manner that they are not engaging with a human being.",
+          "texts": [
+            {
+              "locale": "en",
+              "text": "You are not chatting with a human. This is an AI chatbot."
+            }
+          ],
+          "badge_set": "ai-interaction",
+          "exceptions": [],
+          "needs_legal_review": true
+        }
+      ]
+    },
+    {
+      "id": "US-NH",
+      "name": "New Hampshire",
+      "instruments": [
+        {
+          "id": "nh-hb1596",
+          "title": "HB 1596 (2024), synthetic media and deceptive and fraudulent deepfakes in political advertising",
+          "citation": "RSA 664:14-c",
+          "url": "https://gc.nh.gov/bill_status/billinfo.aspx?id=1813&inflect=2",
+          "status": "in_force",
+          "applies_from": null
+        }
+      ],
+      "rules": [
+        {
+          "id": "us-nh.hb1596.political-synthetic-media",
+          "kind": "deepfake_label",
+          "instrument": "nh-hb1596",
+          "provision": "RSA 664:14-c",
+          "obligated_party": "deployer",
+          "trigger": "Synthetic media depicting a candidate, election official or party is distributed within 90 days before an election in New Hampshire.",
+          "timing": "on_publication",
+          "form": "A disclosure stating that the media was manipulated or generated by artificial intelligence and depicts speech or conduct that did not occur, presented in the manner the statute sets for image, video or audio content.",
+          "texts": [
+            {
+              "locale": "en",
+              "text": "This content has been manipulated or generated by artificial intelligence technology and depicts speech or conduct that did not occur."
+            }
+          ],
+          "badge_set": "ai-manipulated",
+          "exceptions": [
+            "Bona fide news reporting that clearly acknowledges questions about the media's authenticity.",
+            "Satire or parody."
+          ],
+          "needs_legal_review": true
+        }
+      ]
+    },
+    {
+      "id": "US-NY",
+      "name": "New York",
+      "instruments": [
+        {
+          "id": "ny-gbl-art47",
+          "title": "General Business Law Article 47 (2025), AI companion models",
+          "citation": "N.Y. Gen. Bus. Law Art. 47",
+          "url": "https://www.nysenate.gov/legislation/laws/GBS",
+          "status": "in_force",
+          "applies_from": "2025-11-05"
+        },
+        {
+          "id": "ny-synthetic-performer",
+          "title": "Synthetic performer disclosure in advertisements (S.8420-A / A.8887-B, 2025)",
+          "citation": "N.Y. Gen. Bus. Law, synthetic performer advertisement disclosure",
+          "url": "https://www.nysenate.gov/legislation/bills/2025/S8420/amendment/A",
+          "status": "enacted_not_in_force",
+          "applies_from": null
+        }
+      ],
+      "rules": [
+        {
+          "id": "us-ny.gbl47.companion-notice",
+          "kind": "ai_interaction_notice",
+          "instrument": "ny-gbl-art47",
+          "provision": "Gen. Bus. Law Art. 47",
+          "obligated_party": "operator",
+          "trigger": "A user interacts with an AI companion model.",
+          "timing": "at_first_interaction",
+          "form": "A clear and conspicuous notification, verbal or written, at the beginning of any AI companion interaction and at least every three hours during a continuing interaction, that the user is not communicating with a human.",
+          "texts": [
+            {
+              "locale": "en",
+              "text": "You are not communicating with a human. This is an AI companion."
+            },
+            {
+              "locale": "es",
+              "text": "No se está comunicando con un ser humano. Esta es una IA de compañía."
+            }
+          ],
+          "badge_set": "ai-interaction",
+          "exceptions": [],
+          "needs_legal_review": true
+        },
+        {
+          "id": "us-ny.synthetic-performer-ad",
+          "kind": "visible_label",
+          "instrument": "ny-synthetic-performer",
+          "provision": "S.8420-A / A.8887-B",
+          "obligated_party": "deployer",
+          "trigger": "A commercial advertisement includes a synthetic performer: a digitally created asset that appears to be a real performer but is not one.",
+          "timing": "on_display",
+          "form": "Conspicuously disclose in the advertisement that it includes a synthetic performer, when the advertiser has actual knowledge of it.",
+          "texts": [
+            {
+              "locale": "en",
+              "text": "This advertisement includes a synthetic performer created with AI."
+            }
+          ],
+          "badge_set": "ai-generated",
+          "exceptions": [
+            "Audio-only advertisements.",
+            "Uses where the synthetic performer is used in a way consistent with the work's expressive purpose, as the statute defines."
+          ],
+          "needs_legal_review": true
+        }
+      ]
+    },
+    {
+      "id": "US-UT",
+      "name": "Utah",
+      "instruments": [
+        {
+          "id": "ut-sb149",
+          "title": "SB 149 (2024) Artificial Intelligence Policy Act",
+          "citation": "Utah Code Title 13 (disclosure of generative AI use, as enacted by SB 149)",
+          "url": "https://le.utah.gov/~2024/bills/static/SB0149.html",
+          "status": "amended",
+          "applies_from": "2024-05-01"
+        },
+        {
+          "id": "ut-sb226",
+          "title": "SB 226 (2025) Artificial Intelligence Consumer Protection Amendments",
+          "citation": "Utah Code Title 13 (as amended by SB 226)",
+          "url": "https://le.utah.gov/~2025/bills/static/SB0226.html",
+          "status": "in_force",
+          "applies_from": "2025-05-07"
+        }
+      ],
+      "rules": [
+        {
+          "id": "us-ut.sb149.disclose-on-request",
+          "kind": "ai_interaction_notice",
+          "instrument": "ut-sb226",
+          "provision": "SB 149 as amended by SB 226",
+          "obligated_party": "deployer",
+          "trigger": "A person uses generative AI to interact with an individual in a consumer transaction regulated by the Division of Consumer Protection, and the individual makes a clear and unambiguous request to know whether they are interacting with a human.",
+          "timing": "on_request",
+          "form": "Clearly and conspicuously disclose that the individual is interacting with generative AI and not a human.",
+          "texts": [
+            {
+              "locale": "en",
+              "text": "You are interacting with generative AI, not a human."
+            },
+            {
+              "locale": "es",
+              "text": "Está interactuando con IA generativa, no con un ser humano."
+            }
+          ],
+          "badge_set": "ai-interaction",
+          "exceptions": [
+            "Safe harbour where the generative AI clearly and conspicuously discloses, at the outset of and throughout the interaction, that it is generative AI and not a human."
+          ],
+          "needs_legal_review": true
+        },
+        {
+          "id": "us-ut.sb226.regulated-occupation",
+          "kind": "ai_interaction_notice",
+          "instrument": "ut-sb226",
+          "provision": "SB 226 (regulated occupations, high-risk AI interactions)",
+          "obligated_party": "deployer",
+          "trigger": "A person providing services of a regulated occupation uses generative AI in a high-risk AI interaction.",
+          "timing": "before_first_interaction",
+          "form": "Prominently disclose at the outset of the interaction: verbally at the start of an oral exchange, or electronically before a written exchange.",
+          "texts": [
+            {
+              "locale": "en",
+              "text": "Before we begin: you will be interacting with generative AI, not a human."
+            }
+          ],
+          "badge_set": "ai-interaction",
+          "exceptions": [],
+          "needs_legal_review": true
+        }
+      ]
+    },
+    {
+      "id": "IN",
+      "name": "India",
+      "instruments": [
+        {
+          "id": "in-it-rules-sgi",
+          "title": "Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021, as amended for synthetically generated information",
+          "citation": "Rule 3 (due diligence for synthetically generated information)",
+          "url": "https://www.meity.gov.in/",
+          "status": "amended",
+          "applies_from": null
+        }
+      ],
+      "rules": [
+        {
+          "id": "in.sgi.visible-label",
+          "kind": "visible_label",
+          "instrument": "in-it-rules-sgi",
+          "provision": "Rule 3 (labelling of synthetically generated information)",
+          "obligated_party": "platform",
+          "trigger": "An intermediary offers a computer resource that enables the creation or modification of synthetically generated information.",
+          "timing": "on_display",
+          "form": "A prominent visible label on visual content, or a prominent audible disclosure for audio, identifying the content as synthetically generated, in the manner the amended Rules prescribe.",
+          "texts": [
+            {
+              "locale": "en",
+              "text": "Synthetically generated: this content was created or altered using AI."
+            },
+            {
+              "locale": "hi",
+              "text": "कृत्रिम रूप से निर्मित: यह सामग्री एआई की मदद से बनाई या बदली गई है।"
+            }
+          ],
+          "badge_set": "ai-generated",
+          "exceptions": [],
+          "needs_legal_review": true
+        },
+        {
+          "id": "in.sgi.metadata",
+          "kind": "machine_readable_marking",
+          "instrument": "in-it-rules-sgi",
+          "provision": "Rule 3 (permanent metadata or unique identifier)",
+          "obligated_party": "platform",
+          "trigger": "An intermediary enables the creation or modification of synthetically generated information.",
+          "timing": "on_publication",
+          "form": "Embed permanent metadata or a unique identifier that identifies the content as synthetically generated, and do not enable its removal or suppression.",
+          "texts": [],
+          "badge_set": null,
+          "exceptions": [],
+          "needs_legal_review": true
+        }
+      ]
+    },
+    {
+      "id": "CN",
+      "name": "China",
+      "instruments": [
+        {
+          "id": "cn-labeling-measures",
+          "title": "Measures for Labeling Artificial Intelligence-Generated Synthetic Content (CAC and others, 2025)",
+          "citation": "Arts. 4-6 (explicit labels, implicit labels, dissemination platforms)",
+          "url": "https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm",
+          "status": "in_force",
+          "applies_from": "2025-09-01"
+        },
+        {
+          "id": "cn-gb45438",
+          "title": "GB 45438-2025 Cybersecurity technology: Labeling method for content generated by artificial intelligence",
+          "citation": "GB 45438-2025 (mandatory national standard)",
+          "url": null,
+          "status": "in_force",
+          "applies_from": "2025-09-01"
+        }
+      ],
+      "rules": [
+        {
+          "id": "cn.labeling.explicit-label",
+          "kind": "visible_label",
+          "instrument": "cn-labeling-measures",
+          "provision": "Art. 4; label placement per GB 45438-2025",
+          "obligated_party": "provider",
+          "trigger": "A service provider generates or synthesizes text, images, audio, video or virtual scenes of the kinds that require a prominent label.",
+          "timing": "on_publication",
+          "form": "An explicit label perceivable by users, by text, sound or graphics, at the position the standard sets for the medium (for example a text prompt or corner label on images and video, a voice or rhythm prompt for audio).",
+          "texts": [
+            {
+              "locale": "zh-CN",
+              "text": "本内容由人工智能生成"
+            },
+            {
+              "locale": "en",
+              "text": "AI-generated content"
+            }
+          ],
+          "badge_set": "ai-generated",
+          "exceptions": [
+            "A user may request content without an explicit label; the provider then states the user's labelling obligations in its user agreement and keeps the relevant logs for at least six months."
+          ],
+          "needs_legal_review": true
+        },
+        {
+          "id": "cn.labeling.dialogue-notice",
+          "kind": "ai_interaction_notice",
+          "instrument": "cn-labeling-measures",
+          "provision": "Art. 4 (interactive scenes)",
+          "obligated_party": "provider",
+          "trigger": "A user interacts with an AI dialogue service or an interactive virtual scene.",
+          "timing": "at_first_interaction",
+          "form": "A prominent prompt at the start of the interaction, and during it where appropriate.",
+          "texts": [
+            {
+              "locale": "zh-CN",
+              "text": "您正在与人工智能对话"
+            },
+            {
+              "locale": "en",
+              "text": "You are talking with an AI."
+            }
+          ],
+          "badge_set": "ai-interaction",
+          "exceptions": [],
+          "needs_legal_review": true
+        },
+        {
+          "id": "cn.labeling.implicit-label",
+          "kind": "machine_readable_marking",
+          "instrument": "cn-labeling-measures",
+          "provision": "Art. 5; metadata fields per GB 45438-2025",
+          "obligated_party": "provider",
+          "trigger": "A service provider generates or synthesizes content.",
+          "timing": "on_publication",
+          "form": "An implicit label in the file metadata carrying the content attribute, the provider's name or code and a content number; digital watermarks are encouraged.",
+          "texts": [],
+          "badge_set": null,
+          "exceptions": [],
+          "needs_legal_review": true
+        },
+        {
+          "id": "cn.labeling.platform-label",
+          "kind": "visible_label",
+          "instrument": "cn-labeling-measures",
+          "provision": "Art. 6",
+          "obligated_party": "platform",
+          "trigger": "A content dissemination platform detects an implicit label, a user declaration, or traces of generation in content it distributes.",
+          "timing": "on_display",
+          "form": "Add a prominent label around the published content reminding the public that it is, or may be, AI-generated.",
+          "texts": [
+            {
+              "locale": "zh-CN",
+              "text": "疑似人工智能生成"
+            },
+            {
+              "locale": "en",
+              "text": "Possibly AI-generated"
+            }
+          ],
+          "badge_set": "ai-generated",
+          "exceptions": [],
+          "needs_legal_review": true
+        }
+      ]
+    },
+    {
+      "id": "KR",
+      "name": "Republic of Korea",
+      "instruments": [
+        {
+          "id": "kr-ai-framework-act",
+          "title": "Framework Act on the Development of Artificial Intelligence and the Establishment of a Foundation for Trust (2025)",
+          "citation": "Art. 31 (transparency obligations)",
+          "url": "https://www.law.go.kr/",
+          "status": "in_force",
+          "applies_from": "2026-01-22"
+        }
+      ],
+      "rules": [
+        {
+          "id": "kr.art31.1.advance-notice",
+          "kind": "ai_interaction_notice",
+          "instrument": "kr-ai-framework-act",
+          "provision": "Art. 31(1)",
+          "obligated_party": "provider",
+          "trigger": "An AI business operator provides a product or service that operates on high-impact or generative AI.",
+          "timing": "before_first_interaction",
+          "form": "Notify users in advance that the product or service operates on AI.",
+          "texts": [
+            {
+              "locale": "ko",
+              "text": "이 서비스는 생성형 인공지능을 기반으로 운영됩니다."
+            },
+            {
+              "locale": "en",
+              "text": "This service runs on generative AI."
+            }
+          ],
+          "badge_set": "ai-interaction",
+          "exceptions": [],
+          "needs_legal_review": true
+        },
+        {
+          "id": "kr.art31.2.output-label",
+          "kind": "visible_label",
+          "instrument": "kr-ai-framework-act",
+          "provision": "Art. 31(2)",
+          "obligated_party": "provider",
+          "trigger": "A product or service provides outputs generated by generative AI.",
+          "timing": "on_publication",
+          "form": "Indicate that the output was generated by generative AI, in the manner the Enforcement Decree allows (visible or machine-readable).",
+          "texts": [
+            {
+              "locale": "ko",
+              "text": "생성형 인공지능으로 생성된 결과물입니다."
+            },
+            {
+              "locale": "en",
+              "text": "This output was generated by generative AI."
+            }
+          ],
+          "badge_set": "ai-generated",
+          "exceptions": [],
+          "needs_legal_review": true
+        },
+        {
+          "id": "kr.art31.3.realistic-output",
+          "kind": "deepfake_label",
+          "instrument": "kr-ai-framework-act",
+          "provision": "Art. 31(3)",
+          "obligated_party": "provider",
+          "trigger": "AI provides virtual sounds, images or videos that are difficult to distinguish from reality.",
+          "timing": "on_display",
+          "form": "Notify or indicate it in a way users can clearly recognise; for artistic or creative expression, in a way that does not hinder display or enjoyment.",
+          "texts": [
+            {
+              "locale": "ko",
+              "text": "이 콘텐츠는 인공지능으로 생성된 가상의 결과물입니다."
+            },
+            {
+              "locale": "en",
+              "text": "This content is a virtual output generated by AI."
+            }
+          ],
+          "badge_set": "ai-manipulated",
+          "exceptions": [
+            "Artistic or creative expression: indicate in a manner that does not hinder its display or enjoyment."
+          ],
+          "needs_legal_review": true
+        }
+      ]
+    }
+  ],
+  "badge_sets": [
+    {
+      "id": "ai-generated",
+      "label": "AI-generated",
+      "meaning": "The content was generated by AI. An Original Pictures badge design, not an official EU mark.",
+      "variants": ["brand-light", "brand-dark", "neutral"]
+    },
+    {
+      "id": "ai-manipulated",
+      "label": "AI-manipulated",
+      "meaning": "Real-looking content (a deep fake) that was generated or manipulated by AI. An Original Pictures badge design, not an official EU mark.",
+      "variants": ["brand-light", "brand-dark", "neutral"]
+    },
+    {
+      "id": "ai-interaction",
+      "label": "AI interaction",
+      "meaning": "You are interacting with an AI system, not a person. An Original Pictures badge design, not an official EU mark.",
+      "variants": ["brand-light", "brand-dark", "neutral"]
+    },
+    {
+      "id": "ai-assisted",
+      "label": "AI-assisted",
+      "meaning": "A person made the content with help from AI tools. An Original Pictures badge design, not an official EU mark.",
+      "variants": ["brand-light", "brand-dark", "neutral"]
+    }
+  ]
+}

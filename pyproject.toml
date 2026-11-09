@@ -1,0 +1,93 @@
+# Virtual uv workspace root over the Python client packages. Not installable.
+# The source of truth for these packages is a private monorepo; this file is the
+# mirror's own scaffolding so the packages build and test standalone.
+
+[project]
+name = "originalpictures-clients"
+version = "0.0.0"
+description = "Original Pictures Python client packages (virtual workspace root)."
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = [
+  "packages/mcp-scopes",
+  "packages/sdk-python",
+  "packages/disclosure-python",
+  "packages/cli-python",
+  "packages/mcp",
+]
+
+# First-party packages always resolve from the workspace, never an index.
+[tool.uv.sources]
+originalpictures-mcp-scopes = { workspace = true }
+originalpictures-sdk = { workspace = true }
+originalpictures-disclosure = { workspace = true }
+originalpictures-cli = { workspace = true }
+originalpictures-mcp = { workspace = true }
+
+[dependency-groups]
+dev = [
+  "pytest==9.1.1",
+  "pytest-asyncio==1.4.0",
+  "mypy==2.3.0",
+  "ruff==0.16.0",
+  "pyyaml==6.0.3",
+  # All PEP 517 build-system declarations use this exact, hash-locked release.
+  "hatchling==1.31.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = [
+  "packages/mcp-scopes/src",
+  "packages/sdk-python/src",
+  "packages/disclosure-python/src",
+  "packages/cli-python/src",
+  "packages/mcp/src",
+  "tests",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S", "C4", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# S101 assert; S105/S106 dummy credentials passed to test fixtures.
+"**/tests/**" = ["S101", "S105", "S106"]
+"tests/**" = ["S101", "S105", "S106"]
+"**/_generated/**" = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_configs = true
+warn_redundant_casts = true
+no_implicit_reexport = true
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = [
+  "packages/mcp-scopes/src",
+  "packages/sdk-python/src",
+  "packages/disclosure-python/src",
+  "packages/cli-python/src",
+  "packages/mcp/src",
+]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra --strict-markers --import-mode=importlib"
+# Sibling packages/*/tests directories all resolve to the module name `tests`
+# under importlib mode; namespace packages disambiguate them by full path.
+consider_namespace_packages = true
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+pythonpath = ["."]
+markers = [
+  "seam: labelled non-functional structural/compile/content assertion (not behavioral coverage)",
+  "boundary: architectural boundary/isolation assertion",
+]
+testpaths = ["packages"]

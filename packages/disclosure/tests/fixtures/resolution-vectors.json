@@ -1,0 +1,202 @@
+{
+  "$comment": "Shared by tests/policy.test.ts and packages/disclosure-python/tests: both engines must resolve these the same way. Options use the Python names.",
+  "vectors": [
+    {
+      "name": "explicit EU with an Austrian German locale",
+      "options": { "jurisdiction": "EU", "locale": "de-AT" },
+      "expect": {
+        "jurisdiction": "EU",
+        "basis": "explicit",
+        "rule_id": "eu.art50.1.ai-interaction",
+        "locale": "de",
+        "text": "Sie chatten mit einem KI-System.",
+        "timing": "at_first_interaction",
+        "badge_set": "ai-interaction"
+      }
+    },
+    {
+      "name": "server region names a US state",
+      "options": { "region": "US-CA", "accept_language": "en-US,en;q=0.8" },
+      "expect": {
+        "jurisdiction": "US-CA",
+        "basis": "region",
+        "rule_id": "us-ca.sb1001.bot-disclosure",
+        "locale": "en"
+      }
+    },
+    {
+      "name": "lower-case region is accepted",
+      "options": { "region": "us-ny" },
+      "expect": {
+        "jurisdiction": "US-NY",
+        "basis": "region",
+        "rule_id": "us-ny.gbl47.companion-notice",
+        "locale": "en"
+      }
+    },
+    {
+      "name": "a member-state region resolves to the EU and French text",
+      "options": { "region": "FR", "accept_language": "fr-FR,fr;q=0.9,en;q=0.5" },
+      "expect": {
+        "jurisdiction": "EU",
+        "basis": "region",
+        "rule_id": "eu.art50.1.ai-interaction",
+        "locale": "fr"
+      }
+    },
+    {
+      "name": "time zone Seoul with Korean",
+      "options": { "time_zone": "Asia/Seoul", "accept_language": "ko-KR,ko;q=0.9" },
+      "expect": {
+        "jurisdiction": "KR",
+        "basis": "timezone",
+        "rule_id": "kr.art31.1.advance-notice",
+        "locale": "ko",
+        "timing": "before_first_interaction"
+      }
+    },
+    {
+      "name": "time zone Shanghai with simplified Chinese",
+      "options": { "time_zone": "Asia/Shanghai", "accept_language": "zh-CN" },
+      "expect": {
+        "jurisdiction": "CN",
+        "basis": "timezone",
+        "rule_id": "cn.labeling.dialogue-notice",
+        "locale": "zh-CN",
+        "text": "您正在与人工智能对话"
+      }
+    },
+    {
+      "name": "language region subtag only, visible label in Hindi",
+      "options": { "accept_language": "hi-IN", "kind": "visible_label" },
+      "expect": {
+        "jurisdiction": "IN",
+        "basis": "language",
+        "rule_id": "in.sgi.visible-label",
+        "locale": "hi"
+      }
+    },
+    {
+      "name": "a US time zone names no state, so the EU fallback applies",
+      "options": { "time_zone": "America/New_York", "accept_language": "en-US" },
+      "expect": {
+        "jurisdiction": "EU",
+        "basis": "fallback",
+        "rule_id": "eu.art50.1.ai-interaction",
+        "locale": "en"
+      }
+    },
+    {
+      "name": "no fallback resolves nothing",
+      "options": { "time_zone": "America/Chicago", "fallback": null },
+      "expect": null
+    },
+    {
+      "name": "Utah regulated occupation chosen by rule id",
+      "options": { "jurisdiction": "US-UT", "rule_id": "us-ut.sb226.regulated-occupation" },
+      "expect": {
+        "jurisdiction": "US-UT",
+        "basis": "explicit",
+        "rule_id": "us-ut.sb226.regulated-occupation",
+        "timing": "before_first_interaction"
+      }
+    },
+    {
+      "name": "Utah's first AI-interaction rule is disclosure on request",
+      "options": { "jurisdiction": "US-UT" },
+      "expect": {
+        "jurisdiction": "US-UT",
+        "basis": "explicit",
+        "rule_id": "us-ut.sb149.disclose-on-request",
+        "timing": "on_request"
+      }
+    },
+    {
+      "name": "India has no AI-interaction rule",
+      "options": { "jurisdiction": "IN" },
+      "expect": null
+    },
+    {
+      "name": "EU deep fake label in Italian from the region",
+      "options": { "region": "IT", "kind": "deepfake_label", "accept_language": "it-IT" },
+      "expect": {
+        "jurisdiction": "EU",
+        "basis": "region",
+        "rule_id": "eu.art50.4.deep-fake",
+        "locale": "it",
+        "badge_set": "ai-manipulated"
+      }
+    },
+    {
+      "name": "Accept-Language quality order wins over list order",
+      "options": { "jurisdiction": "EU", "accept_language": "en;q=0.5, nl;q=0.9" },
+      "expect": { "jurisdiction": "EU", "rule_id": "eu.art50.1.ai-interaction", "locale": "nl" }
+    },
+    {
+      "name": "New Hampshire political synthetic media",
+      "options": { "region": "US-NH", "kind": "deepfake_label" },
+      "expect": {
+        "jurisdiction": "US-NH",
+        "basis": "region",
+        "rule_id": "us-nh.hb1596.political-synthetic-media",
+        "timing": "on_publication"
+      }
+    },
+    {
+      "name": "Maine chatbot disclosure",
+      "options": { "region": "US-ME" },
+      "expect": {
+        "jurisdiction": "US-ME",
+        "rule_id": "us-me.ld1727.chatbot-disclosure",
+        "text": "You are not chatting with a human. This is an AI chatbot."
+      }
+    },
+    {
+      "name": "California has no visible label option after SB 1000",
+      "options": { "jurisdiction": "US-CA", "kind": "visible_label", "accept_language": "es-MX" },
+      "expect": null
+    },
+    {
+      "name": "California latent disclosure",
+      "options": { "jurisdiction": "US-CA", "kind": "machine_readable_marking" },
+      "expect": {
+        "jurisdiction": "US-CA",
+        "rule_id": "us-ca.sb942.latent-disclosure",
+        "locale": null,
+        "text": null,
+        "badge_set": null
+      }
+    },
+    {
+      "name": "Korean visible label in Korean",
+      "options": { "jurisdiction": "KR", "kind": "visible_label", "accept_language": "ko-KR" },
+      "expect": {
+        "jurisdiction": "KR",
+        "rule_id": "kr.art31.2.output-label",
+        "locale": "ko",
+        "badge_set": "ai-generated"
+      }
+    },
+    {
+      "name": "machine-readable marking has no text",
+      "options": { "jurisdiction": "CN", "kind": "machine_readable_marking" },
+      "expect": {
+        "jurisdiction": "CN",
+        "rule_id": "cn.labeling.implicit-label",
+        "locale": null,
+        "text": null,
+        "badge_set": null
+      }
+    },
+    {
+      "name": "the region hint beats the time zone",
+      "options": { "region": "KR", "time_zone": "Europe/Berlin" },
+      "expect": { "jurisdiction": "KR", "basis": "region" }
+    },
+    {
+      "name": "the time zone beats the language",
+      "options": { "time_zone": "Europe/Lisbon", "accept_language": "ko-KR" },
+      "expect": { "jurisdiction": "EU", "basis": "timezone", "locale": "en" }
+    }
+  ]
+}

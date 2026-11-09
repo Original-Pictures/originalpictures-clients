@@ -1,0 +1,47 @@
+// Builds the publishable bundles: ESM (dist/index.js, dist/core.js), a
+// script-tag IIFE (dist/verify.iife.js, global OriginalPicturesVerify, which
+// defines <op-verify> on load), and declarations under dist/types.
+import { readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import { spawnSync } from "node:child_process";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { build } from "esbuild";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const dist = join(root, "dist");
+rmSync(dist, { recursive: true, force: true });
+
+const shared = { bundle: true, target: "es2022", legalComments: "none", logLevel: "warning" };
+await build({
+  ...shared,
+  entryPoints: [join(root, "src/index.ts"), join(root, "src/core.ts")],
+  outdir: dist,
+  format: "esm",
+  splitting: true,
+  chunkNames: "chunks/[name]-[hash]",
+});
+await build({
+  ...shared,
+  entryPoints: [join(root, "src/index.ts")],
+  outfile: join(dist, "verify.iife.js"),
+  format: "iife",
+  globalName: "OriginalPicturesVerify",
+  minify: true,
+});
+
+const tscBin = createRequire(import.meta.url).resolve("typescript/bin/tsc");
+const tsc = spawnSync(process.execPath, [tscBin, "-p", "tsconfig.build.json"], {
+  cwd: root,
+  stdio: "inherit",
+});
+if (tsc.status !== 0) process.exit(tsc.status ?? 1);
+
+// Sources import "./x.ts" (bundler resolution); published declarations must
+// name the ".js" files a Node-resolution consumer would load.
+const types = join(dist, "types");
+for (const name of readdirSync(types)) {
+  const path = join(types, name);
+  const source = readFileSync(path, "utf8");
+  writeFileSync(path, source.replace(/(from\s+"\.\/[^"]+)\.ts"/g, '$1.js"'));
+}

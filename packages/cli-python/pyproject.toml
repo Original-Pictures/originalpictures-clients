@@ -1,0 +1,93 @@
+[build-system]
+requires = ["hatchling==1.31.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "originalpictures-cli"
+version = "0.1.0"
+description = "Command-line tool to sign media with C2PA Content Credentials, add invisible watermarks, and verify."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "Original Pictures Technologies, Inc.", email = "hello@originalpictures.com" }]
+keywords = [
+  "c2pa",
+  "content-credentials",
+  "provenance",
+  "ai-watermarking",
+  "invisible-watermark",
+  "watermarking",
+  "fingerprinting",
+  "verification",
+  "eu-ai-act",
+  "sb-942",
+  "ai-labeling",
+  "cli",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Multimedia",
+  "Topic :: Multimedia :: Graphics",
+  "Topic :: Multimedia :: Sound/Audio",
+  "Topic :: Multimedia :: Video",
+  "Topic :: Security :: Cryptography",
+  "Topic :: Utilities",
+]
+dependencies = [
+  "click==8.4.2",
+  "keyring==25.7.0",
+  "originalpictures-sdk==1.0.0",
+  "platformdirs==4.11.1",
+  "rich==15.0.0",
+]
+
+[project.urls]
+Homepage = "https://originalpictures.com"
+Documentation = "https://docs.originalpictures.com/"
+Repository = "https://github.com/Original-Pictures/originalpictures-clients"
+Issues = "https://github.com/Original-Pictures/originalpictures-clients/issues"
+Pricing = "https://originalpictures.com/pricing/"
+
+[project.scripts]
+originalpictures = "originalpictures_cli.cli:main"
+
+# The sdist ships what the wheel is built from. Tests read monorepo fixtures and
+# would not run from an extracted sdist.
+[tool.hatch.build.targets.sdist]
+include = ["src", "README.md", "LICENSE"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/originalpictures_cli"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers --import-mode=importlib"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S", "C4", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106"]
+"tests/test_packaging.py" = ["S603", "S607"]
+"tests/test_real_sdk_e2e.py" = ["S603"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_configs = true
+warn_redundant_casts = true
+no_implicit_reexport = true

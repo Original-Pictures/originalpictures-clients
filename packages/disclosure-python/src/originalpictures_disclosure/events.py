@@ -18,7 +18,7 @@ import httpx
 
 from originalpictures_disclosure.policy import JURISDICTION_IDS, ResolvedDisclosure
 
-DEFAULT_API_BASE: Final = "https://dev-api.originalpictures.com"
+DEFAULT_API_BASE: Final = "https://api.originalpictures.com"
 EventKind = Literal[
     "ai_interaction_notice", "visible_label_offered", "visible_label_applied", "user_acknowledged"
 ]

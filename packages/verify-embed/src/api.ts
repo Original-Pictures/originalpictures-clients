@@ -1,11 +1,11 @@
 import type { PublicCheckResult, PublicVerifyPage } from "./types.ts";
 
 /**
- * The deployed public API. Production may later move host (owner decision,
- * docs/deployment/domains.md); pass `apiBase` (or the `api-base` attribute) to
- * point at another deployment.
+ * The published API origin (owner decision 2026-11-09,
+ * docs/deployment/api-host-2026-11.md); pass `apiBase` (or the `api-base`
+ * attribute) to point at another deployment.
  */
-export const DEFAULT_API_BASE = "https://dev-api.originalpictures.com";
+export const DEFAULT_API_BASE = "https://api.originalpictures.com";
 /** op_domain.verify_pages.VERIFY_PAGE_SLUG_PATTERN */
 export const SLUG_PATTERN = /^[a-z0-9](?:[a-z0-9-]{1,46})[a-z0-9]$/;
 /** op_domain.verify_pages.PUBLIC_CHECK_MAX_BYTES */

@@ -76,7 +76,7 @@ same `mcpServers` entry:
       "args": ["originalpictures-mcp"],
       "env": {
         "ORIGINALPICTURES_API_KEY": "opk_...",
-        "ORIGINALPICTURES_API_BASE_URL": "https://dev-api.originalpictures.com",
+        "ORIGINALPICTURES_API_BASE_URL": "https://api.originalpictures.com",
         "ORIGINALPICTURES_MCP_SCOPES": "assets:read,jobs:read,recipes:read,verifications:read"
       }
     }
@@ -89,7 +89,7 @@ same `mcpServers` entry:
 ```sh
 claude mcp add originalpictures \
   -e ORIGINALPICTURES_API_KEY=opk_... \
-  -e ORIGINALPICTURES_API_BASE_URL=https://dev-api.originalpictures.com \
+  -e ORIGINALPICTURES_API_BASE_URL=https://api.originalpictures.com \
   -e ORIGINALPICTURES_MCP_SCOPES=assets:read,jobs:read \
   -- uvx originalpictures-mcp
 ```
@@ -156,7 +156,7 @@ owner. It is not offered over HTTP, because a remote server must never read file
 
 ### 4. Use the hosted server instead (no local install)
 
-The same tools are served by the API at `https://dev-api.originalpictures.com/mcp` (stateless
+The same tools are served by the API at `https://api.originalpictures.com/mcp` (stateless
 Streamable HTTP, `Authorization: Bearer opk_...`), with upload tools for agents that have no local
 files. See [Hosted MCP server](https://docs.originalpictures.com/integrations/mcp-remote/).
 
@@ -177,16 +177,16 @@ are not supported.
 
 ## Configuration
 
-| Variable                                        | Meaning                                                | Default                                |
-| ----------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
-| `ORIGINALPICTURES_API_KEY`                      | API key (required, server-side secret)                 | none                                   |
-| `ORIGINALPICTURES_MCP_SCOPES`                   | Comma-separated tool scope allowlist                   | empty: no tool enabled                 |
-| `ORIGINALPICTURES_API_BASE_URL`                 | API origin                                             | `https://dev-api.originalpictures.com` |
-| `ORIGINALPICTURES_MCP_REMOTE_TOKEN`             | Bearer token for `--transport http` (16 to 4096 chars) | none                                   |
-| `ORIGINALPICTURES_MCP_DEFAULT_DEADLINE_SECONDS` | Default per-call deadline                              | `20`                                   |
-| `ORIGINALPICTURES_MCP_MAX_DEADLINE_SECONDS`     | Largest deadline a call may ask for (at most 120)      | `120`                                  |
-| `ORIGINALPICTURES_MCP_MAX_OUTPUT_BYTES`         | Bound on one tool result (1 KiB to 1 MiB)              | `262144`                               |
-| `ORIGINALPICTURES_MCP_MAX_PAGE_SIZE`            | Largest list page (1 to 100)                           | `100`                                  |
+| Variable                                        | Meaning                                                | Default                            |
+| ----------------------------------------------- | ------------------------------------------------------ | ---------------------------------- |
+| `ORIGINALPICTURES_API_KEY`                      | API key (required, server-side secret)                 | none                               |
+| `ORIGINALPICTURES_MCP_SCOPES`                   | Comma-separated tool scope allowlist                   | empty: no tool enabled             |
+| `ORIGINALPICTURES_API_BASE_URL`                 | API origin                                             | `https://api.originalpictures.com` |
+| `ORIGINALPICTURES_MCP_REMOTE_TOKEN`             | Bearer token for `--transport http` (16 to 4096 chars) | none                               |
+| `ORIGINALPICTURES_MCP_DEFAULT_DEADLINE_SECONDS` | Default per-call deadline                              | `20`                               |
+| `ORIGINALPICTURES_MCP_MAX_DEADLINE_SECONDS`     | Largest deadline a call may ask for (at most 120)      | `120`                              |
+| `ORIGINALPICTURES_MCP_MAX_OUTPUT_BYTES`         | Bound on one tool result (1 KiB to 1 MiB)              | `262144`                           |
+| `ORIGINALPICTURES_MCP_MAX_PAGE_SIZE`            | Largest list page (1 to 100)                           | `100`                              |
 
 Command-line options: `--transport` (`stdio`, the default, or `http`), `--host`, `--port` (default
 `8000`) and `--path` (default `/mcp`).

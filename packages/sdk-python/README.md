@@ -13,7 +13,7 @@ cover exact raw bytes that a JSON client must not re-encode.
 ```python
 from originalpictures import Client
 
-with Client(base_url="https://dev-api.originalpictures.com", api_key="opk_...") as client:
+with Client(base_url="https://api.originalpictures.com", api_key="opk_...") as client:
     me = client.get_current_user()
     capabilities = client.get_capabilities()
 ```
@@ -82,7 +82,7 @@ path = Path("photo.jpg")
 digest = hashlib.sha256(path.read_bytes()).hexdigest()
 
 with Client(
-    base_url="https://dev-api.originalpictures.com",
+    base_url="https://api.originalpictures.com",
     api_key=os.environ["ORIGINALPICTURES_API_KEY"],
 ) as client:
     upload = client.create_upload(
@@ -245,7 +245,7 @@ from originalpictures import AsyncClient, RateLimitError
 
 async def recent_assets() -> None:
     async with AsyncClient(
-        base_url="https://dev-api.originalpictures.com", api_key="opk_..."
+        base_url="https://api.originalpictures.com", api_key="opk_..."
     ) as client:
         try:
             page = await client.list_assets(parameters={"limit": 20})
@@ -261,14 +261,14 @@ asyncio.run(recent_assets())
 
 ## Configuration
 
-| Setting             | Where                              | Default                                          |
-| ------------------- | ---------------------------------- | ------------------------------------------------ |
-| API origin          | `Client(base_url=...)`             | none; use `https://dev-api.originalpictures.com` |
-| API key             | `Client(api_key=...)`              | none; read it from your secret store             |
-| Request timeout     | `Client(timeout=...)` (seconds)    | `30.0`                                           |
-| JSON response bound | `Client(max_response_bytes=...)`   | `DEFAULT_MAX_RESPONSE_BYTES` (16 MiB)            |
-| Custom HTTP client  | `Client(http_client=httpx.Client)` | a private `httpx.Client`                         |
-| Public check origin | `verify_public(..., api_base=...)` | `https://dev-api.originalpictures.com`           |
+| Setting             | Where                              | Default                                      |
+| ------------------- | ---------------------------------- | -------------------------------------------- |
+| API origin          | `Client(base_url=...)`             | none; use `https://api.originalpictures.com` |
+| API key             | `Client(api_key=...)`              | none; read it from your secret store         |
+| Request timeout     | `Client(timeout=...)` (seconds)    | `30.0`                                       |
+| JSON response bound | `Client(max_response_bytes=...)`   | `DEFAULT_MAX_RESPONSE_BYTES` (16 MiB)        |
+| Custom HTTP client  | `Client(http_client=httpx.Client)` | a private `httpx.Client`                     |
+| Public check origin | `verify_public(..., api_base=...)` | `https://api.originalpictures.com`           |
 
 The SDK reads no environment variables itself; the examples use `ORIGINALPICTURES_API_KEY` by
 convention, the same name the CLI and MCP server read. Do not put API keys in command arguments or

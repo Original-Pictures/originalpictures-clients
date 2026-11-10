@@ -17,9 +17,9 @@ if SUPPORTED_SCOPES is not _CONTRACT_SUPPORTED_SCOPES:
     raise RuntimeError("MCP scope contract import drifted")
 
 
-#: The documented public API origin (docs.originalpictures.com/llms.txt). The retired
-#: api.originalpictures.com host is never a default.
-DEFAULT_API_BASE_URL: Final = "https://dev-api.originalpictures.com"
+#: The documented public API origin (docs.originalpictures.com/llms.txt). Owner decision
+#: 2026-11-09: clients default to api.originalpictures.com, never the development host.
+DEFAULT_API_BASE_URL: Final = "https://api.originalpictures.com"
 
 
 class ConfigurationError(ValueError):

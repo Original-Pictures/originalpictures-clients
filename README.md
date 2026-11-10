@@ -17,7 +17,7 @@ Documentation: <https://docs.originalpictures.com>
 | [`packages/disclosure-python`](packages/disclosure-python) | `originalpictures-disclosure` | PyPI | `pip install originalpictures-disclosure` |
 | [`packages/sdk-typescript`](packages/sdk-typescript) | `@originalpictures/sdk` | npm | `npm install @originalpictures/sdk` |
 | [`packages/verify-embed`](packages/verify-embed) | `@originalpictures/verify` | npm | `npm install @originalpictures/verify` |
-| [`packages/disclosure`](packages/disclosure) | `@originalpictures/disclosure` | npm | `npm install @originalpictures/disclosure` (not yet published from this repository) |
+| [`packages/disclosure`](packages/disclosure) | `@originalpictures/disclosure` | npm | `npm install @originalpictures/disclosure` |
 
 Each package's own README covers usage. `packages/typescript-config` and
 `packages/eslint-config` are private build and lint configuration; they are never

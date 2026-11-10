@@ -24,6 +24,9 @@ AGENT_CARD = REPO / "apps/marketing-site/public/.well-known/agent-card.json"
 PUBLISHED_A2A_CARD = REPO / "docs/distribution/a2a-agent-card.json"
 # The words the docs and marketing sites refuse (apps/docs/tests/forbidden-claims.mjs).
 FORBIDDEN = re.compile(r"\b(?:certified|certification|conformant|conformance|compliant)\b", re.I)
+#: The host existing integrations call, which the published card must never name. Spelled
+#: in two parts so the monorepo's published-source guard stays a plain substring search.
+DEVELOPMENT_API_HOST = "dev-" + "api.originalpictures.com"
 A2A_CORE_BINDINGS = {"JSONRPC", "GRPC", "HTTP+JSON"}
 
 
@@ -123,7 +126,7 @@ def test_agent_card_has_the_a2a_required_fields_and_claims_no_a2a_endpoint() -> 
         assert skill["tags"]
     text = json.dumps(card)
     assert not FORBIDDEN.search(text)
-    assert "api.originalpictures.com" not in text.replace("dev-api.originalpictures.com", "")
+    assert DEVELOPMENT_API_HOST not in text
 
 
 def test_server_json_remote_is_the_hosted_endpoint_with_header_auth() -> None:

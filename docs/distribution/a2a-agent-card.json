@@ -3,12 +3,12 @@
   "description": "Signs media with C2PA Content Credentials (optionally with an invisible watermark, server-side fingerprints or an AI-generation declaration), reports what a file's Content Credentials declare about its origin, and returns the drafted AI-disclosure rules for a jurisdiction and content type. Each skill runs the same service, scopes, billing and rate limits as the Original Pictures REST API; authenticate with an API key as a bearer token. Verification states declared origin only, never whether content is real.",
   "supportedInterfaces": [
     {
-      "url": "https://dev-api.originalpictures.com/a2a",
+      "url": "https://api.originalpictures.com/a2a",
       "protocolBinding": "JSONRPC",
       "protocolVersion": "1.0"
     },
     {
-      "url": "https://dev-api.originalpictures.com/a2a",
+      "url": "https://api.originalpictures.com/a2a",
       "protocolBinding": "JSONRPC",
       "protocolVersion": "0.3"
     }
@@ -86,7 +86,7 @@
     }
   ],
   "protocolVersion": "0.3.0",
-  "url": "https://dev-api.originalpictures.com/a2a",
+  "url": "https://api.originalpictures.com/a2a",
   "preferredTransport": "JSONRPC",
   "security": [
     {

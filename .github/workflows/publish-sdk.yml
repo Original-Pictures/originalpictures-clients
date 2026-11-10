@@ -19,10 +19,10 @@ name: Publish SDK
 # OIDC token, and it runs no repository code: it downloads the built artifact and
 # uploads it.
 #
-# Not published from this workflow: @originalpictures/disclosure. Its build
-# (scripts/build.mjs -> scripts/generate.mjs --check) compares its bundled policy
-# document with a source file that exists only in the private source repository,
-# so it cannot build standalone here yet.
+# @originalpictures/disclosure builds standalone here since the source repository's
+# PR #204: without the private packages/domain, its committed assets/policy copy is
+# the source, and the monorepo test that keeps that copy equal to packages/domain is
+# skipped outside the monorepo.
 #
 # One test reads a file that exists only in the private source repository (the
 # design-token build behind @originalpictures/verify's tests/tokens.test.ts); it is
@@ -45,6 +45,7 @@ on:
           - disclosure-python
           - sdk-typescript
           - verify
+          - disclosure
       dry_run:
         description: "Build, test and verify only; publish nothing"
         required: false
@@ -59,6 +60,7 @@ on:
       - "disclosure-python-v*"
       - "sdk-ts-v*"
       - "verify-v*"
+      - "disclosure-v*"
 
 permissions:
   contents: read
@@ -138,7 +140,7 @@ jobs:
           set -euo pipefail
           pnpm install --frozen-lockfile
           mkdir -p "${GITHUB_WORKSPACE}/npm-dist"
-          for directory in packages/sdk-typescript packages/verify-embed; do
+          for directory in packages/sdk-typescript packages/verify-embed packages/disclosure; do
             name="$(jq -r .name "${directory}/package.json")"
             pnpm --filter "${name}" run build
             (cd "${directory}" && pnpm pack --pack-destination "${GITHUB_WORKSPACE}/npm-dist")
@@ -191,6 +193,7 @@ jobs:
               disclosure-python-v*) package=disclosure-python; tag_version="${REF_NAME#disclosure-python-v}" ;;
               sdk-ts-v*) package=sdk-typescript; tag_version="${REF_NAME#sdk-ts-v}" ;;
               verify-v*) package=verify; tag_version="${REF_NAME#verify-v}" ;;
+              disclosure-v*) package=disclosure; tag_version="${REF_NAME#disclosure-v}" ;;
               *) echo "::error::unrecognised release tag ${REF_NAME}"; exit 1 ;;
             esac
             dry_run=false
@@ -207,6 +210,7 @@ jobs:
             disclosure-python) directory=packages/disclosure-python; registry=pypi ;;
             sdk-typescript) directory=packages/sdk-typescript; registry=npm ;;
             verify) directory=packages/verify-embed; registry=npm ;;
+            disclosure) directory=packages/disclosure; registry=npm ;;
             *) echo "::error::unknown package ${package}"; exit 1 ;;
           esac
           if [[ "${registry}" == "pypi" ]]; then
@@ -492,7 +496,7 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-  # One npm publish job per package. Both use the `release` environment.
+  # One npm publish job per package. All three use the `release` environment.
 
   publish-npm-sdk:
     name: Publish @originalpictures/sdk to npm
@@ -560,6 +564,45 @@ jobs:
           # package and falls back to this token, which the first publish needs.
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           EXPECTED_NAME: "@originalpictures/verify"
+        run: |
+          set -euo pipefail
+          npm_version="$(npm --version)"
+          if [[ "$(printf '%s\n' 11.5.1 "${npm_version}" | sort -V | head -1)" != "11.5.1" ]]; then
+            echo "::error::npm ${npm_version} predates trusted publishing (11.5.1)"; exit 1
+          fi
+          tarballs=("${GITHUB_WORKSPACE}"/npm-dist/*.tgz)
+          test "${#tarballs[@]}" -eq 1
+          test "$(tar -xOzf "${tarballs[0]}" package/package.json | jq -r .name)" = "${EXPECTED_NAME}"
+          # This repository is public, so npm provenance is always requested.
+          npm publish "${tarballs[0]}" --access public --provenance
+
+  publish-npm-disclosure:
+    name: Publish @originalpictures/disclosure to npm
+    needs: [resolve, build-npm]
+    if: ${{ needs.resolve.outputs.distribution == '@originalpictures/disclosure' && needs.resolve.outputs.dry_run == 'false' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment:
+      name: release
+      url: https://www.npmjs.com/package/@originalpictures/disclosure/v/${{ needs.resolve.outputs.version }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: npm-dist
+          path: npm-dist/
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: https://registry.npmjs.org
+      - name: Publish
+        env:
+          # npm prefers trusted publishing (OIDC) when it is configured for the
+          # package and falls back to this token, which the first publish needs.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          EXPECTED_NAME: "@originalpictures/disclosure"
         run: |
           set -euo pipefail
           npm_version="$(npm --version)"

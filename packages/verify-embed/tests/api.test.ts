@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { VerifyError, fetchMedia, fetchVerifyPage, inspect, verify } from "../src/core.ts";
 import { PAGE, completed, json, mockFetch } from "./fixtures.ts";
 
-const BASE = "https://dev-api.originalpictures.com/v1/public/verify-pages/studio-nova";
+const BASE = "https://api.originalpictures.com/v1/public/verify-pages/studio-nova";
 const file = () => new Blob([new Uint8Array([0xff, 0xd8, 0xff])], { type: "image/jpeg" });
 
 afterEach(() => {

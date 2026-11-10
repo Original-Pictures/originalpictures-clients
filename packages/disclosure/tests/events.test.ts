@@ -97,7 +97,7 @@ describe("DisclosureClient", () => {
     const client = new DisclosureClient({ publishableKey: KEY, fetch });
     await expect(client.log(INPUT)).resolves.toEqual(RECEIPT);
     const call = calls[0]!;
-    expect(call.url).toBe("https://dev-api.originalpictures.com/v1/disclosures/events");
+    expect(call.url).toBe("https://api.originalpictures.com/v1/disclosures/events");
     expect(call.init.method).toBe("POST");
     expect(call.init.credentials).toBe("omit");
     expect(call.init.keepalive).toBe(true);

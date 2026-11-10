@@ -8,7 +8,7 @@ job.
 
 ```sh
 pipx install originalpictures-cli
-export ORIGINALPICTURES_API_URL=https://dev-api.originalpictures.com
+export ORIGINALPICTURES_API_URL=https://api.originalpictures.com
 originalpictures auth login            # paste the key at the hidden prompt
 originalpictures capabilities show
 ```
@@ -63,7 +63,7 @@ installed an `op` alias; it was removed because `op` is the 1Password CLI's comm
 2. Point the CLI at the API and store the key:
 
    ```sh
-   originalpictures config set-api-url https://dev-api.originalpictures.com
+   originalpictures config set-api-url https://api.originalpictures.com
    originalpictures auth login
    originalpictures auth status
    ```
@@ -159,7 +159,7 @@ of it. It is never a judgement about the content itself.
 ```sh
 # The key comes from the CI secret store as an environment variable, never as an argument.
 export ORIGINALPICTURES_API_KEY="$OP_SIGNING_KEY"
-export ORIGINALPICTURES_API_URL=https://dev-api.originalpictures.com
+export ORIGINALPICTURES_API_URL=https://api.originalpictures.com
 for file in build/images/*.png; do
   asset=$(originalpictures --json uploads file "$file" --media-type image/png | jq -r .completion.asset_id)
   originalpictures --json sign accept --asset "$asset" --watermark --fingerprint | jq -r .job_id
@@ -169,7 +169,7 @@ done
 ### 6. Several accounts with profiles
 
 ```sh
-originalpictures --profile staging config set-api-url https://dev-api.originalpictures.com
+originalpictures --profile staging config set-api-url https://api.originalpictures.com
 originalpictures --profile staging auth login --token-stdin < staging-key.txt
 originalpictures --profile staging --json user show
 originalpictures config profiles

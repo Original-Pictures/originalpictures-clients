@@ -8,10 +8,10 @@ export const PAGE: PublicVerifyPage = {
   schema_version: "op.public-verify-page.v1",
   slug: "studio-nova",
   display_name: "Studio Nova",
-  logo_url: "https://dev-api.originalpictures.com/v1/public/verify-pages/studio-nova/logo",
+  logo_url: "https://api.originalpictures.com/v1/public/verify-pages/studio-nova/logo",
   colours: { accent: "#0F4C5C", background: "#F7F5F0", text: "#14213D" },
   recover_own_assets: true,
-  check_url: "https://dev-api.originalpictures.com/v1/public/verify-pages/studio-nova/checks",
+  check_url: "https://api.originalpictures.com/v1/public/verify-pages/studio-nova/checks",
   max_upload_bytes: 25 * 1024 * 1024,
   statement: STATEMENT,
 };

@@ -7,7 +7,7 @@ import type { ResolvedDisclosure } from "./policy.ts";
 import { isJurisdictionId } from "./policy.ts";
 import type { JurisdictionId } from "./policy-types.ts";
 
-export const DEFAULT_API_BASE = "https://dev-api.originalpictures.com";
+export const DEFAULT_API_BASE = "https://api.originalpictures.com";
 
 export const EVENT_KINDS = [
   "ai_interaction_notice",

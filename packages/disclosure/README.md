@@ -161,12 +161,12 @@ you see events you did not send. An allowed-origins restriction is not available
 
 ## Configuration
 
-| Setting         | Where                                                     | Default                                |
-| --------------- | --------------------------------------------------------- | -------------------------------------- |
-| API origin      | `api-base` attribute, `DisclosureClient({ apiBase })`     | `https://dev-api.originalpictures.com` |
-| Publishable key | `publishable-key`, `DisclosureClient({ publishableKey })` | none: nothing is sent                  |
-| Jurisdiction    | `jurisdiction` attribute, `resolve({ jurisdiction })`     | `auto`, falling back to `EU`           |
-| Policy document | `resolve({ policy })` with `fetchPolicy()`                | the bundled `2026-10.v1` policy        |
+| Setting         | Where                                                     | Default                            |
+| --------------- | --------------------------------------------------------- | ---------------------------------- |
+| API origin      | `api-base` attribute, `DisclosureClient({ apiBase })`     | `https://api.originalpictures.com` |
+| Publishable key | `publishable-key`, `DisclosureClient({ publishableKey })` | none: nothing is sent              |
+| Jurisdiction    | `jurisdiction` attribute, `resolve({ jurisdiction })`     | `auto`, falling back to `EU`       |
+| Policy document | `resolve({ policy })` with `fetchPolicy()`                | the bundled `2026-10.v1` policy    |
 
 Badge files: `@originalpictures/disclosure/badges/ai-generated-brand-light.svg` and the other eleven
 combinations. `badgeSvg(id, variant)` returns the same markup. The policy JSON is exported as

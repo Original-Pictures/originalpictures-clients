@@ -35,9 +35,9 @@
         },
         {
           "name": "ORIGINALPICTURES_API_BASE_URL",
-          "description": "Original Pictures API origin. Defaults to https://dev-api.originalpictures.com.",
+          "description": "Original Pictures API origin. Defaults to https://api.originalpictures.com.",
           "isRequired": false,
-          "default": "https://dev-api.originalpictures.com"
+          "default": "https://api.originalpictures.com"
         }
       ]
     }
@@ -45,7 +45,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://dev-api.originalpictures.com/mcp",
+      "url": "https://api.originalpictures.com/mcp",
       "headers": [
         {
           "name": "Authorization",

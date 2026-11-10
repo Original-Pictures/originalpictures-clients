@@ -341,7 +341,7 @@ export function browserHints(): JurisdictionHints {
 export async function fetchPolicy(
   options: { apiBase?: string; version?: string; fetch?: typeof globalThis.fetch } = {},
 ): Promise<DisclosurePolicyDocument> {
-  const base = (options.apiBase ?? "https://dev-api.originalpictures.com").replace(/\/+$/, "");
+  const base = (options.apiBase ?? "https://api.originalpictures.com").replace(/\/+$/, "");
   const query = options.version ? `?version=${encodeURIComponent(options.version)}` : "";
   const response = await (options.fetch ?? globalThis.fetch)(
     `${base}/v1/disclosures/policies${query}`,

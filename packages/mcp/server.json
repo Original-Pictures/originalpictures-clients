@@ -2,14 +2,23 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.originalpictures/mcp",
   "title": "Original Pictures",
-  "description": "MCP server: sign media with C2PA Content Credentials, add invisible watermarks, verify origin.",
-  "version": "0.1.0",
-  "websiteUrl": "https://docs.originalpictures.com",
+  "description": "Sign media with C2PA Content Credentials and verify its declared origin.",
+  "version": "1.0.0",
+  "websiteUrl": "https://docs.originalpictures.com/integrations/mcp-remote/",
   "repository": {
     "url": "https://github.com/Original-Pictures/originalpictures-clients",
     "source": "github",
     "subfolder": "packages/mcp"
   },
+  "icons": [
+    {
+      "src": "https://originalpictures.com/favicon-512x512.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "512x512"
+      ]
+    }
+  ],
   "packages": [
     {
       "registryType": "pypi",

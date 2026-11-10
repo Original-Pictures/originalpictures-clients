@@ -136,14 +136,14 @@ Event kinds: `ai_interaction_notice`, `visible_label_offered`, `visible_label_ap
 
 ## Configuration
 
-| Setting         | Where                                         | Default                                |
-| --------------- | --------------------------------------------- | -------------------------------------- |
-| API origin      | `DisclosureEventLogger(..., api_base=...)`    | `https://dev-api.originalpictures.com` |
-| Request timeout | `DisclosureEventLogger(..., timeout=...)`     | `10.0` seconds                         |
-| Retry delay     | `DisclosureEventLogger(..., retry_delay=...)` | `1.0` second (one retry)               |
-| HTTP client     | `DisclosureEventLogger(..., http_client=...)` | a private `httpx.Client`               |
-| Fallback        | `resolve(..., fallback=...)`                  | `"EU"`; `None` resolves nothing        |
-| Policy document | `resolve(..., policy=...)`                    | the bundled `2026-10.v1` policy        |
+| Setting         | Where                                         | Default                            |
+| --------------- | --------------------------------------------- | ---------------------------------- |
+| API origin      | `DisclosureEventLogger(..., api_base=...)`    | `https://api.originalpictures.com` |
+| Request timeout | `DisclosureEventLogger(..., timeout=...)`     | `10.0` seconds                     |
+| Retry delay     | `DisclosureEventLogger(..., retry_delay=...)` | `1.0` second (one retry)           |
+| HTTP client     | `DisclosureEventLogger(..., http_client=...)` | a private `httpx.Client`           |
+| Fallback        | `resolve(..., fallback=...)`                  | `"EU"`; `None` resolves nothing    |
+| Policy document | `resolve(..., policy=...)`                    | the bundled `2026-10.v1` policy    |
 
 The API key must be an `opk_` key; a publishable key with only `disclosure:write` is enough. The API
 origin must use HTTPS (plain HTTP only on loopback, for tests).

@@ -64,7 +64,7 @@ describe("<op-verify>", () => {
     expect(logo.hidden).toBe(false);
     expect(logo.alt).toBe("Studio Nova");
     expect(fetchMock.calls[0]?.url).toBe(
-      "https://dev-api.originalpictures.com/v1/public/verify-pages/studio-nova",
+      "https://api.originalpictures.com/v1/public/verify-pages/studio-nova",
     );
   });
 
@@ -259,7 +259,7 @@ describe("<op-verify>", () => {
 });
 
 const MEDIA_URL = "https://cdn.studio-nova.example/gallery/sunrise.jpg";
-const CHECKS_URL = "https://dev-api.originalpictures.com/v1/public/verify-pages/studio-nova/checks";
+const CHECKS_URL = "https://api.originalpictures.com/v1/public/verify-pages/studio-nova/checks";
 
 function media(bytes = 3, headers: Record<string, string> = {}): Response {
   return new Response(new Uint8Array(bytes).fill(0xff), {
@@ -305,7 +305,7 @@ describe("<op-verify src> inspect mode", () => {
     chip.click();
     await settle();
     expect(fetchMock.calls.map((call) => call.url)).toEqual([
-      "https://dev-api.originalpictures.com/v1/public/verify-pages/studio-nova",
+      "https://api.originalpictures.com/v1/public/verify-pages/studio-nova",
       MEDIA_URL,
       CHECKS_URL,
     ]);

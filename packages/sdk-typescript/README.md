@@ -14,7 +14,7 @@ client must not re-encode.
 import { OriginalPicturesClient } from "@originalpictures/sdk";
 
 const client = new OriginalPicturesClient({
-  baseUrl: "https://dev-api.originalpictures.com",
+  baseUrl: "https://api.originalpictures.com",
   apiKey: process.env.ORIGINALPICTURES_API_KEY,
 });
 const me = await client.operations.getCurrentUser();
@@ -80,7 +80,7 @@ import {
 } from "@originalpictures/sdk";
 
 const client = new OriginalPicturesClient({
-  baseUrl: "https://dev-api.originalpictures.com",
+  baseUrl: "https://api.originalpictures.com",
   apiKey: process.env.ORIGINALPICTURES_API_KEY,
 });
 
@@ -251,13 +251,13 @@ Pass the exact raw body bytes to `verifyWebhook`; re-serialized JSON fails the H
 
 ## Configuration
 
-| Option             | Meaning                                  | Default                                          |
-| ------------------ | ---------------------------------------- | ------------------------------------------------ |
-| `baseUrl`          | API origin (may include a path prefix)   | required: `https://dev-api.originalpictures.com` |
-| `apiKey`           | API key, sent as `Authorization: Bearer` | none (anonymous operations only)                 |
-| `timeoutMs`        | Per-request timeout                      | `30000`                                          |
-| `maxResponseBytes` | Hard bound on a JSON response            | `DEFAULT_MAX_RESPONSE_BYTES` (16 MiB)            |
-| `fetch`            | A custom `fetch` implementation          | `globalThis.fetch`                               |
+| Option             | Meaning                                  | Default                                      |
+| ------------------ | ---------------------------------------- | -------------------------------------------- |
+| `baseUrl`          | API origin (may include a path prefix)   | required: `https://api.originalpictures.com` |
+| `apiKey`           | API key, sent as `Authorization: Bearer` | none (anonymous operations only)             |
+| `timeoutMs`        | Per-request timeout                      | `30000`                                      |
+| `maxResponseBytes` | Hard bound on a JSON response            | `DEFAULT_MAX_RESPONSE_BYTES` (16 MiB)        |
+| `fetch`            | A custom `fetch` implementation          | `globalThis.fetch`                           |
 
 The SDK reads no environment variables itself; the examples use `ORIGINALPICTURES_API_KEY` by
 convention. Query strings and fragments in `baseUrl` are rejected locally before any request or

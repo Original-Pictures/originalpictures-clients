@@ -24,7 +24,7 @@ from originalpictures import (
     verify_public_async,
 )
 
-BASE = "https://dev-api.originalpictures.com/v1/public/verify-pages/studio-nova"
+BASE = "https://api.originalpictures.com/v1/public/verify-pages/studio-nova"
 STATEMENT = (
     "This describes what the file declares about its origin and whether this provider's "
     "system has a record of it. It is not a judgement of whether the content is real."

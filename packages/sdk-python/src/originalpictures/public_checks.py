@@ -34,7 +34,7 @@ from originalpictures.errors import (
     TransportError,
 )
 
-DEFAULT_PUBLIC_API_BASE = "https://dev-api.originalpictures.com"
+DEFAULT_PUBLIC_API_BASE = "https://api.originalpictures.com"
 #: op_domain.verify_pages.PUBLIC_CHECK_MAX_BYTES; one value with the client's
 #: ``MAX_PUBLIC_CHECK_BYTES`` (``Client.verify_public``).
 PUBLIC_CHECK_MAX_BYTES = MAX_PUBLIC_CHECK_BYTES

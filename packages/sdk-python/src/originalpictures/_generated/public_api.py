@@ -30,7 +30,7 @@ class PublicApiOperationContract:
 
 
 PUBLIC_API_OPENAPI_SHA256: Final = (
-    "b3273edca0392952de7e3df3f83e674d8fa5083a8b3e08e5b18a9f0c6d8985e4"
+    "dae3f9e07fda334eaeb7de8e2769869fd4074f4594501fc5b0eeab91b0bf9609"
 )
 PUBLIC_API_VERSION: Final = "1.0.0"
 PUBLIC_API_OPERATIONS: Final[tuple[PublicApiOperationContract, ...]] = (
@@ -7926,6 +7926,7 @@ type ReasonCode = (
     | Literal["SIGNING_TIMESTAMP_REPLAYED"]
     | Literal["STORAGE_IMMUTABILITY_VIOLATION"]
     | Literal["STORAGE_OPERATION_FAILED"]
+    | Literal["TENANT_WRITE_CONTENDED"]
     | Literal["UPLOAD_ABORTED"]
     | Literal["UPLOAD_ALREADY_COMPLETED"]
     | Literal["UPLOAD_CHECKSUM_MISMATCH"]

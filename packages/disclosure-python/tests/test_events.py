@@ -81,7 +81,7 @@ def test_logs_with_bearer_key_and_idempotency_key() -> None:
         receipt = logger.log_resolved(resolved, "user_acknowledged", subject_ref="user:42")
     assert receipt.event_id == "dse_abcdefghijklmnop"
     request = seen[0]
-    assert str(request.url) == "https://dev-api.originalpictures.com/v1/disclosures/events"
+    assert str(request.url) == "https://api.originalpictures.com/v1/disclosures/events"
     assert request.headers["authorization"] == f"Bearer {KEY}"
     assert request.headers["idempotency-key"].startswith("dse-")
     body = json.loads(request.content)

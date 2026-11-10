@@ -144,7 +144,7 @@ text colours apply in the light theme when they read at WCAG AA. Style hooks: `:
 | Attribute   | Meaning                                                                                     |
 | ----------- | ------------------------------------------------------------------------------------------- |
 | `page`      | Your verify page slug (required).                                                           |
-| `api-base`  | API origin; defaults to `https://dev-api.originalpictures.com`.                             |
+| `api-base`  | API origin; defaults to `https://api.originalpictures.com`.                                 |
 | `theme`     | `light`, `dark`, or omitted to follow the system.                                           |
 | `src`       | Inspect mode: the URL of an asset on your page.                                             |
 | `for`       | Inspect mode: the `id` of an `<img>`, `<video>` or `<audio>` on your page.                  |

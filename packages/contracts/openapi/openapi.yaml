@@ -22499,8 +22499,9 @@ components:
         status:
           $ref: '#/components/schemas/DeclaredCredentialsStatus'
           description: 'valid: present and validates against the trust list; valid_untrusted: intact but
-            the signer is not on the trust list; invalid: present but does not validate; absent: no manifest
-            could be read.'
+            its trust was not established (the signer is not on the trust list, or a trust input such
+            as revocation status was unavailable); invalid: present but does not validate; absent: no
+            manifest could be read.'
       required:
       - status
       - declared_origin
@@ -22522,13 +22523,13 @@ components:
         - image/jpeg
         - image/png
         - image/webp
-        check_url: https://dev-api.originalpictures.com/v1/public/verify-pages/studio-nova/checks
+        check_url: https://api.originalpictures.com/v1/public/verify-pages/studio-nova/checks
         colours:
           accent: '#0F4C5C'
           background: '#F7F5F0'
           text: '#14213D'
         display_name: Studio Nova
-        logo_url: https://dev-api.originalpictures.com/v1/public/verify-pages/studio-nova/logo
+        logo_url: https://api.originalpictures.com/v1/public/verify-pages/studio-nova/logo
         max_upload_bytes: 26214400
         recover_own_assets: true
         schema_version: op.public-verify-page.v1
@@ -22828,6 +22829,7 @@ components:
       - SIGNING_TIMESTAMP_REPLAYED
       - STORAGE_IMMUTABILITY_VIOLATION
       - STORAGE_OPERATION_FAILED
+      - TENANT_WRITE_CONTENDED
       - UPLOAD_ABORTED
       - UPLOAD_ALREADY_COMPLETED
       - UPLOAD_CHECKSUM_MISMATCH

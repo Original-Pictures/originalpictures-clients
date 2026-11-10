@@ -20,7 +20,7 @@ startCommand:
           sign:write and verify:write enable the billable tools.
       apiBaseUrl:
         type: string
-        default: https://dev-api.originalpictures.com
+        default: https://api.originalpictures.com
         description: Original Pictures API origin.
   commandFunction: |-
     (config) => ({
@@ -29,10 +29,10 @@ startCommand:
       env: {
         ORIGINALPICTURES_API_KEY: config.apiKey,
         ORIGINALPICTURES_MCP_SCOPES: config.scopes ?? 'assets:read,jobs:read,recipes:read,verifications:read',
-        ORIGINALPICTURES_API_BASE_URL: config.apiBaseUrl ?? 'https://dev-api.originalpictures.com',
+        ORIGINALPICTURES_API_BASE_URL: config.apiBaseUrl ?? 'https://api.originalpictures.com',
       },
     })
   exampleConfig:
     apiKey: opk_your-key
     scopes: assets:read,jobs:read,recipes:read,verifications:read
-    apiBaseUrl: https://dev-api.originalpictures.com
+    apiBaseUrl: https://api.originalpictures.com

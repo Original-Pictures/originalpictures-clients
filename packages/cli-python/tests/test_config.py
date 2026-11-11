@@ -66,8 +66,19 @@ def test_auth_status_never_returns_the_credential(runtime_factory) -> None:
     assert result.exit_code == ExitCode.SUCCESS
     assert "op_test_secret_value" not in result.stdout
     assert json.loads(result.stdout) == {
-        "api_url": "http://localhost:8000",
+        "api_url": "https://api.originalpictures.com",
         "credential_configured": True,
         "credential_source": "environment",
         "profile": "default",
     }
+
+
+def test_a_fresh_profile_defaults_to_the_public_api_over_https(tmp_path, credentials) -> None:
+    # 0.1.0 defaulted to http://localhost:8000: with no configured URL a fresh install sent
+    # its bearer key in plain text to whatever listened on that port (test kit, 2026-11-11).
+    from originalpictures_cli.config import DEFAULT_API_URL, ConfigStore
+
+    store = ConfigStore(config_dir=tmp_path / "fresh", credential_backend=credentials, environ={})
+
+    assert DEFAULT_API_URL == "https://api.originalpictures.com"
+    assert store.resolve().api_url == "https://api.originalpictures.com"

@@ -8,7 +8,6 @@ job.
 
 ```sh
 pipx install originalpictures-cli
-export ORIGINALPICTURES_API_URL=https://api.originalpictures.com
 originalpictures auth login            # paste the key at the hidden prompt
 originalpictures capabilities show
 ```
@@ -60,16 +59,17 @@ installed an `op` alias; it was removed because `op` is the 1Password CLI's comm
 
 1. Create an API key in the [console](https://console.originalpictures.com/) under **API keys**
    (keys start with `opk_`).
-2. Point the CLI at the API and store the key:
+2. Store the key:
 
    ```sh
-   originalpictures config set-api-url https://api.originalpictures.com
    originalpictures auth login
    originalpictures auth status
    ```
 
-   The CLI's built-in default API URL is a local development address, so set the URL once per
-   profile as above, or export `ORIGINALPICTURES_API_URL` in each shell.
+   The CLI talks to `https://api.originalpictures.com` by default (since 0.1.1; 0.1.0 defaulted
+   to a local development address). To use another origin, run
+   `originalpictures config set-api-url URL` once per profile or export
+   `ORIGINALPICTURES_API_URL`.
 
 3. Upload, sign and wait:
 
@@ -186,6 +186,9 @@ originalpictures config profiles
 | `--max-response-bytes N`                 | Hard JSON response bound (default 16 MiB)                       |
 | `--json`                                 | Deterministic JSON on stdout, canonical JSON errors on stderr   |
 | `config set-api-url URL`                 | Store the profile's API URL (URLs carrying credentials refused) |
+
+With neither a profile URL nor `ORIGINALPICTURES_API_URL`, the CLI uses
+`https://api.originalpictures.com` (0.1.1 and later).
 
 Mutation bodies use `--input FILE` and explicit operation parameters use `--parameters FILE`; `-`
 reads the JSON object from standard input. Run `originalpictures --help` for every command group:

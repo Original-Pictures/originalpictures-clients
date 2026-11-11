@@ -11,7 +11,7 @@ a tool is authorized.
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Sequence
 from contextlib import AbstractAsyncContextManager
 from dataclasses import dataclass
 from importlib import metadata
@@ -19,10 +19,14 @@ from pathlib import Path
 from typing import Annotated, Any, Final, Literal, Protocol
 
 import anyio
+import mcp.types as mt
 from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
+from fastmcp.resources import ResourceTemplate
 from fastmcp.server.auth import require_scopes as _require_scopes
 from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
+from fastmcp.server.middleware import CallNext, Middleware, MiddlewareContext
+from fastmcp.tools import Tool
 from originalpictures.errors import ResponseTooLargeError
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -162,7 +166,8 @@ class ToolAccess:
     """How a transport authorizes the shared tools.
 
     ``scoped`` filters and gates each tool on the caller's OAuth-style scopes (HTTP
-    transports, where FastMCP sees an access token). ``local_files`` offers the tools
+    transports, where FastMCP sees an access token); unscoped (STDIO) lists only the
+    components in the local allowlist. ``local_files`` offers the tools
     that read a file on the server's own host, which only a local STDIO server may.
     ``operation_ceiling`` returns the transport's per-request spend ceiling, if any.
     """
@@ -302,8 +307,9 @@ def create_server(
         version=metadata.version("originalpictures-mcp"),
     )
     # FastMCP authorization checks rely on HTTP OAuth context. STDIO has no such
-    # context, so the mandatory local allowlist in ``invoke`` remains authoritative
-    # there. Remote components additionally use FastMCP scope filtering.
+    # context, so there the local allowlist filters what is listed, and the mandatory
+    # local check in ``ToolRunner.run`` stays authoritative for calls.
+    # Remote components additionally use FastMCP scope filtering.
     remote = settings.remote_token is not None
     register_tools(
         mcp,
@@ -322,6 +328,41 @@ SERVER_INSTRUCTIONS: Final = (
 )
 
 
+class _AllowlistListing(Middleware):
+    """Lists only the components whose scope is in the local allowlist (STDIO).
+
+    FastMCP's component auth needs an HTTP access token and is skipped on STDIO, so
+    without this a STDIO client listed every tool whatever ``ORIGINALPICTURES_MCP_SCOPES``
+    said (package test kit, 2026-11-11). Hidden components stay registered on purpose: a
+    call to one still reaches ``ToolRunner.run`` and gets its explicit scope refusal
+    rather than an unknown-tool error, and nothing reaches the SDK either way.
+    """
+
+    def __init__(self, hidden_tools: frozenset[str], hidden_templates: frozenset[str]) -> None:
+        self._hidden_tools = hidden_tools
+        self._hidden_templates = hidden_templates
+
+    async def on_list_tools(
+        self,
+        context: MiddlewareContext[mt.ListToolsRequest],
+        call_next: CallNext[mt.ListToolsRequest, Sequence[Tool]],
+    ) -> Sequence[Tool]:
+        tools = await call_next(context)
+        return [tool for tool in tools if tool.name not in self._hidden_tools]
+
+    async def on_list_resource_templates(
+        self,
+        context: MiddlewareContext[mt.ListResourceTemplatesRequest],
+        call_next: CallNext[mt.ListResourceTemplatesRequest, Sequence[ResourceTemplate]],
+    ) -> Sequence[ResourceTemplate]:
+        templates = await call_next(context)
+        return [
+            template
+            for template in templates
+            if template.uri_template not in self._hidden_templates
+        ]
+
+
 def register_tools(
     mcp: FastMCP,
     *,
@@ -332,14 +373,30 @@ def register_tools(
     """Register the reviewed tools and resources on ``mcp``.
 
     ``policy.scopes`` is the local allowlist every call is checked against before the
-    SDK is reached; with ``access.scoped`` each component also requires its scope from
-    the caller's access token, so a caller lists only what it may call.
+    SDK is reached. With ``access.scoped`` each component also requires its scope from
+    the caller's access token; without it (STDIO) the listing is filtered by the
+    allowlist instead. Either way a caller lists only what it may call.
     """
 
     settings = policy
+    tool_scopes: dict[str, str] = {}
+    template_scopes: dict[str, str] = {}
 
     def component_auth(scope: str) -> Any:
         return _require_scopes(scope) if access.scoped else None
+
+    def tool(*, scope: str, **options: Any) -> Callable[[Callable[..., Any]], Any]:
+        register = mcp.tool(auth=component_auth(scope), **options)
+
+        def decorate(function: Callable[..., Any]) -> Any:
+            tool_scopes[function.__name__] = scope
+            return register(function)
+
+        return decorate
+
+    def resource(uri: str, *, scope: str, **options: Any) -> Callable[[Callable[..., Any]], Any]:
+        template_scopes[uri] = scope
+        return mcp.resource(uri, auth=component_auth(scope), **options)
 
     def check_spend(operations: int, requested: int | None) -> None:
         """Refuse before anything is sent when a call would start more than a ceiling."""
@@ -368,9 +425,9 @@ def register_tools(
             result["cursor"] = cursor
         return result
 
-    @mcp.tool(
+    @tool(
         title="Read the API key's identity",
-        auth=component_auth("identity:read"),
+        scope="identity:read",
         annotations=tool_annotations("Read the API key's identity", READ_ONLY_HINTS),
     )
     async def get_current_user(deadline_seconds: Deadline = None) -> Any:
@@ -378,9 +435,9 @@ def register_tools(
 
         return await invoke("get_current_user", "identity:read", deadline_seconds=deadline_seconds)
 
-    @mcp.tool(
+    @tool(
         title="List assets",
-        auth=component_auth("assets:read"),
+        scope="assets:read",
         annotations=tool_annotations("List assets", READ_ONLY_HINTS),
     )
     async def list_assets(
@@ -404,9 +461,9 @@ def register_tools(
             "list_assets", "assets:read", parameters=parameters, deadline_seconds=deadline_seconds
         )
 
-    @mcp.tool(
+    @tool(
         title="Read an asset",
-        auth=component_auth("assets:read"),
+        scope="assets:read",
         annotations=tool_annotations("Read an asset", READ_ONLY_HINTS),
     )
     async def get_asset(asset_id: Identifier, deadline_seconds: Deadline = None) -> Any:
@@ -419,9 +476,9 @@ def register_tools(
             deadline_seconds=deadline_seconds,
         )
 
-    @mcp.tool(
+    @tool(
         title="List jobs",
-        auth=component_auth("jobs:read"),
+        scope="jobs:read",
         annotations=tool_annotations("List jobs", READ_ONLY_HINTS),
     )
     async def list_jobs(
@@ -453,9 +510,9 @@ def register_tools(
             "list_jobs", "jobs:read", parameters=parameters, deadline_seconds=deadline_seconds
         )
 
-    @mcp.tool(
+    @tool(
         title="Read a job",
-        auth=component_auth("jobs:read"),
+        scope="jobs:read",
         annotations=tool_annotations("Read a job", READ_ONLY_HINTS),
     )
     async def get_job(job_id: Identifier, deadline_seconds: Deadline = None) -> Any:
@@ -468,9 +525,9 @@ def register_tools(
             deadline_seconds=deadline_seconds,
         )
 
-    @mcp.tool(
+    @tool(
         title="List signing receipts",
-        auth=component_auth("assets:read"),
+        scope="assets:read",
         annotations=tool_annotations("List signing receipts", READ_ONLY_HINTS),
     )
     async def list_receipts(
@@ -494,9 +551,9 @@ def register_tools(
             deadline_seconds=deadline_seconds,
         )
 
-    @mcp.tool(
+    @tool(
         title="Read a signing receipt",
-        auth=component_auth("assets:read"),
+        scope="assets:read",
         annotations=tool_annotations("Read a signing receipt", READ_ONLY_HINTS),
     )
     async def get_signing_receipt(receipt_id: Identifier, deadline_seconds: Deadline = None) -> Any:
@@ -509,9 +566,9 @@ def register_tools(
             deadline_seconds=deadline_seconds,
         )
 
-    @mcp.tool(
+    @tool(
         title="List recipes",
-        auth=component_auth("jobs:read"),
+        scope="jobs:read",
         annotations=tool_annotations("List recipes", READ_ONLY_HINTS),
     )
     async def list_recipes(deadline_seconds: Deadline = None) -> Any:
@@ -519,9 +576,9 @@ def register_tools(
 
         return await invoke("list_recipes", "jobs:read", deadline_seconds=deadline_seconds)
 
-    @mcp.tool(
+    @tool(
         title="Read a recipe",
-        auth=component_auth("recipes:read"),
+        scope="recipes:read",
         annotations=tool_annotations("Read a recipe", READ_ONLY_HINTS),
     )
     async def get_recipe(recipe_id: Identifier, deadline_seconds: Deadline = None) -> Any:
@@ -534,9 +591,9 @@ def register_tools(
             deadline_seconds=deadline_seconds,
         )
 
-    @mcp.tool(
+    @tool(
         title="Read usage and caps",
-        auth=component_auth("billing:read"),
+        scope="billing:read",
         annotations=tool_annotations("Read usage and caps", READ_ONLY_HINTS),
     )
     async def get_usage(
@@ -560,9 +617,9 @@ def register_tools(
             deadline_seconds=deadline_seconds,
         )
 
-    @mcp.tool(
+    @tool(
         title="Read the price list",
-        auth=component_auth("billing:read"),
+        scope="billing:read",
         annotations=tool_annotations("Read the price list", READ_ONLY_HINTS),
     )
     async def get_pricing(deadline_seconds: Deadline = None) -> Any:
@@ -572,9 +629,9 @@ def register_tools(
             "get_billing_pricing", "billing:read", deadline_seconds=deadline_seconds
         )
 
-    @mcp.tool(
+    @tool(
         title="List verifications",
-        auth=component_auth("verifications:read"),
+        scope="verifications:read",
         annotations=tool_annotations("List verifications", READ_ONLY_HINTS),
     )
     async def list_verifications(
@@ -601,9 +658,9 @@ def register_tools(
             deadline_seconds=deadline_seconds,
         )
 
-    @mcp.tool(
+    @tool(
         title="Read a verification",
-        auth=component_auth("recovery:read"),
+        scope="recovery:read",
         annotations=tool_annotations("Read a verification", READ_ONLY_HINTS),
     )
     async def get_verification(
@@ -618,9 +675,9 @@ def register_tools(
             deadline_seconds=deadline_seconds,
         )
 
-    @mcp.tool(
+    @tool(
         title="Read a verification's history",
-        auth=component_auth("verifications:read"),
+        scope="verifications:read",
         annotations=tool_annotations("Read a verification's history", READ_ONLY_HINTS),
     )
     async def get_verification_history(
@@ -635,9 +692,9 @@ def register_tools(
             deadline_seconds=deadline_seconds,
         )
 
-    @mcp.tool(
+    @tool(
         title="Verify a stored file (billable)",
-        auth=component_auth("verify:write"),
+        scope="verify:write",
         annotations=tool_annotations("Verify a stored file (billable)", BILLABLE_WRITE_HINTS),
         meta=billing_meta(operations="one verification", max_operations=1),
     )
@@ -673,9 +730,9 @@ def register_tools(
             deadline_seconds=deadline_seconds,
         )
 
-    @mcp.tool(
+    @tool(
         title="Sign an asset (billable)",
-        auth=component_auth("sign:write"),
+        scope="sign:write",
         annotations=tool_annotations("Sign an asset (billable)", BILLABLE_WRITE_HINTS),
         meta=billing_meta(
             operations="the signature, plus the watermark and fingerprints when chosen",
@@ -756,8 +813,9 @@ def register_tools(
     # transport: a remote (HTTP) server must never read files on its own host.
     if access.local_files:
 
-        @mcp.tool(
+        @tool(
             title="Check a local file on a verify page",
+            scope="verify:write",
             annotations=tool_annotations(
                 "Check a local file on a verify page",
                 # It starts a public check on a verify page another account owns (and
@@ -798,9 +856,9 @@ def register_tools(
             return await guarded("verify:write", deadline_seconds, call)
 
     # Resources intentionally mirror only exact, read-only public projections.
-    @mcp.resource(
+    @resource(
         "originalpictures://assets/{asset_id}",
-        auth=component_auth("assets:read"),
+        scope="assets:read",
         mime_type="application/json",
     )
     async def asset_resource(asset_id: Identifier) -> Any:
@@ -808,9 +866,9 @@ def register_tools(
 
         return await invoke("get_asset", "assets:read", parameters={"asset_id": asset_id})
 
-    @mcp.resource(
+    @resource(
         "originalpictures://jobs/{job_id}",
-        auth=component_auth("jobs:read"),
+        scope="jobs:read",
         mime_type="application/json",
     )
     async def job_resource(job_id: Identifier) -> Any:
@@ -818,9 +876,9 @@ def register_tools(
 
         return await invoke("get_job", "jobs:read", parameters={"job_id": job_id})
 
-    @mcp.resource(
+    @resource(
         "originalpictures://receipts/{receipt_id}",
-        auth=component_auth("assets:read"),
+        scope="assets:read",
         mime_type="application/json",
     )
     async def receipt_resource(receipt_id: Identifier) -> Any:
@@ -830,9 +888,9 @@ def register_tools(
             "get_signing_receipt", "assets:read", parameters={"receipt_id": receipt_id}
         )
 
-    @mcp.resource(
+    @resource(
         "originalpictures://recipes/{recipe_id}",
-        auth=component_auth("recipes:read"),
+        scope="recipes:read",
         mime_type="application/json",
     )
     async def recipe_resource(recipe_id: Identifier) -> Any:
@@ -840,9 +898,9 @@ def register_tools(
 
         return await invoke("get_recipe", "recipes:read", parameters={"recipe_id": recipe_id})
 
-    @mcp.resource(
+    @resource(
         "originalpictures://verifications/{verification_id}",
-        auth=component_auth("recovery:read"),
+        scope="recovery:read",
         mime_type="application/json",
     )
     async def verification_resource(verification_id: Identifier) -> Any:
@@ -852,6 +910,18 @@ def register_tools(
             "get_verification",
             "recovery:read",
             parameters={"verification_id": verification_id},
+        )
+
+    if not access.scoped:
+        mcp.add_middleware(
+            _AllowlistListing(
+                hidden_tools=frozenset(
+                    name for name, scope in tool_scopes.items() if scope not in settings.scopes
+                ),
+                hidden_templates=frozenset(
+                    uri for uri, scope in template_scopes.items() if scope not in settings.scopes
+                ),
+            )
         )
 
 

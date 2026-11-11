@@ -16,7 +16,7 @@ from urllib.parse import urlsplit
 import keyring
 from platformdirs import PlatformDirs
 
-DEFAULT_API_URL = "http://localhost:8000"
+DEFAULT_API_URL = "https://api.originalpictures.com"
 DEFAULT_PROFILE = "default"
 MAX_CONFIG_BYTES = 256 * 1024
 _PROFILE_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$")

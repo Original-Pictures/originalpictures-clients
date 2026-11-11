@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "originalpictures-mcp"
-version = "0.1.0"
-description = "MCP server: sign media with C2PA Content Credentials, add invisible watermarks, verify origin."
+version = "0.1.1"
+description = "Sign media with C2PA Content Credentials and verify its declared origin."
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]

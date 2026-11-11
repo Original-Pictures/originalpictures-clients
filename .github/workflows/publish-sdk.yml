@@ -130,7 +130,8 @@ jobs:
           server = json.load(open("packages/mcp/server.json"))
           project = tomllib.load(open("packages/mcp/pyproject.toml", "rb"))["project"]
           (package,) = server["packages"]
-          assert server["version"] == package["version"] == project["version"], "version drift"
+          # The registry entry has its own version; only the package pin follows pyproject.
+          assert package["version"] == project["version"], "version drift"
           assert package["identifier"] == project["name"], "identifier drift"
           assert len(server["description"]) <= 100, "registry description too long"
           print("server.json OK")

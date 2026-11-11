@@ -101,6 +101,71 @@ async def test_generated_sdk_method_and_grouped_mappings_are_the_only_boundary(
 
 
 @pytest.mark.asyncio
+async def test_empty_allowlist_lists_no_tool_and_no_resource_template() -> None:
+    # The README promises that an empty ORIGINALPICTURES_MCP_SCOPES shows no tools.
+    # 0.1.0 listed all of them over STDIO (package test kit, 2026-11-11).
+    server = create_server(
+        Settings(api_key="opk_lookup.secret", scopes=frozenset()),
+        client_factory=factory(FakeClient()),
+    )
+    async with Client(server) as client:
+        assert await client.list_tools() == []
+        assert await client.list_resource_templates() == []
+
+
+@pytest.mark.asyncio
+async def test_listing_follows_the_allowlist_and_hidden_calls_are_still_refused() -> None:
+    read_scopes = frozenset(
+        {"identity:read", "assets:read", "jobs:read", "recipes:read", "verifications:read"}
+    )
+    fake = FakeClient()
+    server = create_server(
+        Settings(api_key="opk_lookup.secret", scopes=read_scopes),
+        client_factory=factory(fake),
+    )
+    async with Client(server) as client:
+        tools = {tool.name for tool in await client.list_tools()}
+        templates = {str(t.uriTemplate) for t in await client.list_resource_templates()}
+        # A tool left out of the listing is still registered, so a client that calls it
+        # anyway gets the explicit scope refusal, not an unknown-tool error.
+        with pytest.raises(ToolError, match="not configured"):
+            await client.call_tool("get_usage", {})
+
+    assert tools == {
+        "get_current_user",
+        "list_assets",
+        "get_asset",
+        "list_jobs",
+        "get_job",
+        "list_receipts",
+        "get_signing_receipt",
+        "list_recipes",
+        "get_recipe",
+        "list_verifications",
+        "get_verification_history",
+    }
+    assert not tools & {"sign", "create_verification", "verify_public", "get_pricing"}
+    assert templates == {
+        "originalpictures://assets/{asset_id}",
+        "originalpictures://jobs/{job_id}",
+        "originalpictures://receipts/{receipt_id}",
+        "originalpictures://recipes/{recipe_id}",
+    }
+    assert fake.calls == []
+
+
+@pytest.mark.asyncio
+async def test_write_scopes_list_the_billable_tools() -> None:
+    server = create_server(
+        Settings(api_key="opk_lookup.secret", scopes=frozenset({"sign:write", "verify:write"})),
+        client_factory=factory(FakeClient()),
+    )
+    async with Client(server) as client:
+        tools = {tool.name for tool in await client.list_tools()}
+    assert tools == {"sign", "create_verification", "verify_public"}
+
+
+@pytest.mark.asyncio
 async def test_default_deny_and_wrong_scope_never_reach_sdk() -> None:
     fake = FakeClient()
     server = create_server(

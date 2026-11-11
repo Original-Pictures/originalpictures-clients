@@ -1,6 +1,6 @@
 {
   "name": "@originalpictures/cli-python-workspace",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Turbo wrapper for the Original Pictures Python CLI.",
   "scripts": {

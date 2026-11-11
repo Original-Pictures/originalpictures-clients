@@ -47,7 +47,11 @@ def test_server_json_matches_the_package() -> None:
     server = _server()
     project = _project()
     (package,) = server["packages"]
-    assert server["version"] == package["version"] == project["version"]
+    # The registry entry is versioned on its own (1.0.0 was published with package 0.1.0,
+    # and a registry version can never be reused), so only the package pin must follow
+    # pyproject. A new package release still needs a new registry version.
+    assert package["version"] == project["version"]
+    assert re.fullmatch(r"\d+\.\d+\.\d+", server["version"])
     assert package["identifier"] == project["name"]
     assert server["description"] == project["description"]
     assert len(server["description"]) <= 100

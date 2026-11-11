@@ -3,7 +3,7 @@
   "name": "com.originalpictures/mcp",
   "title": "Original Pictures",
   "description": "Sign media with C2PA Content Credentials and verify its declared origin.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "websiteUrl": "https://docs.originalpictures.com/integrations/mcp-remote/",
   "repository": {
     "url": "https://github.com/Original-Pictures/originalpictures-clients",
@@ -14,9 +14,7 @@
     {
       "src": "https://originalpictures.com/favicon-512x512.png",
       "mimeType": "image/png",
-      "sizes": [
-        "512x512"
-      ]
+      "sizes": ["512x512"]
     }
   ],
   "packages": [
@@ -24,7 +22,7 @@
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "originalpictures-mcp",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "runtimeHint": "uvx",
       "transport": {
         "type": "stdio"

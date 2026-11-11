@@ -130,7 +130,8 @@ jobs:
           server = json.load(open("packages/mcp/server.json"))
           project = tomllib.load(open("packages/mcp/pyproject.toml", "rb"))["project"]
           (package,) = server["packages"]
-          assert server["version"] == package["version"] == project["version"], "version drift"
+          # The registry entry has its own version; only the package pin follows pyproject.
+          assert package["version"] == project["version"], "version drift"
           assert package["identifier"] == project["name"], "identifier drift"
           assert len(server["description"]) <= 100, "registry description too long"
           print("server.json OK")
@@ -147,6 +148,13 @@ jobs:
           done
           for tarball in "${GITHUB_WORKSPACE}"/npm-dist/*.tgz; do
             node .github/scripts/check-packed-manifest.mjs "${tarball}"
+            # npm refuses even a dry run over a published version, so a package this
+            # release does not change is packed and checked but not dry-published.
+            spec="$(tar -xOzf "${tarball}" package/package.json | jq -r '.name + "@" + .version')"
+            if npm view "${spec}" version >/dev/null 2>&1; then
+              echo "${spec} is already on npm: packed and checked, publish dry run skipped"
+              continue
+            fi
             # An absolute path: npm reads a bare "dir/file.tgz" as a GitHub shorthand.
             npm publish "${tarball}" --dry-run --access public
           done

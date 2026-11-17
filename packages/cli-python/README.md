@@ -132,15 +132,17 @@ originalpictures sign accept --asset ast_… --watermark --fingerprint \
 `originalpictures capabilities show` lists the media types, recipes, watermark and fingerprint
 algorithms your deployment offers.
 
-### 3. Declare AI generation (sign-only)
+### 3. Declare AI generation
 
 ```sh
-originalpictures sign accept --asset ast_… --no-watermark --fingerprint \
+originalpictures sign accept --asset ast_… --watermark --fingerprint --creator crid_… \
   --ai-generated --software-agent "Studio Nova Imagine" --software-agent-version 2.0
 ```
 
-`--ai-generated` with `--watermark` is refused before any request is sent: "AI-generated mark needs
-a sign-only call (C2PA claim plan)".
+`--ai-generated` combines with any `--watermark`/`--fingerprint` choice and with `--creator`, in one
+job (since 0.2.0; 0.1.x refused it with `--watermark` before sending the request, following the API
+rule of that time). A watermark-only recipe writes no manifest, so the API refuses a declaration
+with it (`AI_DECLARATION_REQUIRES_SIGN_ONLY`).
 
 ### 4. Verify a file
 

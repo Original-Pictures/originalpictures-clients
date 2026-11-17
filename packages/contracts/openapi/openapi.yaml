@@ -13374,8 +13374,7 @@ paths:
       x-op-contract-audience: tenant
     post:
       description: Save a workflow. Refused combinations are 422 WORKFLOW_TEMPLATE_INVALID with detail_code
-        AI_DECLARATION_REQUIRES_SIGN_ONLY or IDENTITY_CREDENTIAL_NOT_ENROLLED; a duplicate name is 409
-        WORKFLOW_TEMPLATE_CONFLICT.
+        IDENTITY_CREDENTIAL_NOT_ENROLLED; a duplicate name is 409 WORKFLOW_TEMPLATE_CONFLICT.
       operationId: createWorkflowTemplate
       parameters:
       - in: header
@@ -14098,7 +14097,7 @@ components:
       type: object
     AiDeclaredSigningReceiptEvidenceResponse:
       additionalProperties: false
-      description: 'A sign-only publication whose manifest declares the asset AI-generated.
+      description: 'A publication whose manifest declares the asset AI-generated under ``c2pa.created``.
 
 
         ``op.signing-receipt.ai-declared.v1`` is a peer of ``op.signing-receipt.v2``, not a
@@ -14107,7 +14106,9 @@ components:
 
         so there is no ``prior_provenance`` to report; ``ai_declaration`` states the declaration
 
-        instead. Every other block is the same evidence in the same shape.'
+        instead. Every other block is the same evidence in the same shape -- including a
+
+        watermark in ``bindings`` since the declared plan''s v2 (2026-11-17).'
       properties:
         ai_declaration:
           $ref: '#/components/schemas/ReceiptAiDeclarationResponse'
@@ -24212,9 +24213,15 @@ components:
           anyOf:
           - $ref: '#/components/schemas/AiDeclarationRequest'
           - type: 'null'
-          description: 'Declare that this asset was produced with a generative model. The manifest then
-            records c2pa.created with the digital source type you state, instead of c2pa.opened. Requires
-            a sign-only recipe: watermark false.'
+          description: Declare that this asset was produced with a generative model. Combines with any
+            watermark and fingerprint choice and with creator_id, in one job. For an asset with no Content
+            Credentials the manifest records c2pa.created with the digital source type you state, then
+            c2pa.watermarked when a watermark is embedded, the watermark's registered soft binding after
+            ISCC, and the creator reference. For an asset that already carries a manifest (for example
+            a model provider's signed output) the manifest opens it as the parent ingredient, which keeps
+            the provider's own digital source type, and adds your c2pa.ai-disclosure; that parent must
+            itself declare generative media (GENERATOR_INGREDIENT_INVALID otherwise). Refused with a watermark-only
+            recipe.
         asset_id:
           description: Tenant-visible ast_ asset identifier; never an immutable aob_ object ID.
           pattern: ^ast_[a-z2-7]{16}$
@@ -26320,8 +26327,8 @@ components:
         blocks:
           description: 'In pipeline order: upload, watermark, fingerprint, ai_mark, cawg_identity, sign,
             verify, webhook, disclosure_event. upload and sign are required; each block at most once.
-            ai_mark with watermark, and cawg_identity before an identity certificate is enrolled, are
-            refused exactly as POST /v1/sign refuses them.'
+            ai_mark combines with watermark and fingerprint; cawg_identity before an identity certificate
+            is enrolled is refused exactly as POST /v1/sign refuses it.'
           items:
             discriminator:
               mapping:
@@ -26394,8 +26401,8 @@ components:
         blocks:
           description: 'In pipeline order: upload, watermark, fingerprint, ai_mark, cawg_identity, sign,
             verify, webhook, disclosure_event. upload and sign are required; each block at most once.
-            ai_mark with watermark, and cawg_identity before an identity certificate is enrolled, are
-            refused exactly as POST /v1/sign refuses them.'
+            ai_mark combines with watermark and fingerprint; cawg_identity before an identity certificate
+            is enrolled is refused exactly as POST /v1/sign refuses it.'
           items:
             discriminator:
               mapping:

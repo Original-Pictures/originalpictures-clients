@@ -76,8 +76,6 @@ AI_DIGITAL_SOURCE_TYPES: tuple[str, ...] = (
     "compositeWithTrainedAlgorithmicMedia",
     "compositeSynthetic",
 )
-#: The console's text for the one combination the C2PA claim plan refuses.
-AI_MARK_REQUIRES_SIGN_ONLY = "AI-generated mark needs a sign-only call (C2PA claim plan)"
 
 
 @dataclass(frozen=True)
@@ -585,7 +583,7 @@ def _ai_declaration_parameters() -> list[click.Parameter]:
             is_flag=True,
             default=False,
             help="Declare that a generative model produced the file (sends ai_declaration). "
-            "Needs --no-watermark and --software-agent.",
+            "Needs --software-agent; combines with --watermark and --fingerprint.",
         ),
         click.Option(
             ["--software-agent", "software_agent_name"],
@@ -609,11 +607,12 @@ def _ai_declaration_parameters() -> list[click.Parameter]:
 def _apply_ai_declaration(
     body: dict[str, Any] | None, kwargs: dict[str, Any]
 ) -> dict[str, Any] | None:
-    """Build ``ai_declaration`` from ``--ai-generated`` and refuse what the API refuses.
+    """Build ``ai_declaration`` from ``--ai-generated`` and its companion flags.
 
-    The API is the authority; this only turns the one refusal a flag user is most
-    likely to hit (a watermark with an AI declaration) into a local usage error that
-    says why, before any network call.
+    Only flag usage is checked here (a companion without ``--ai-generated``, a missing
+    software agent, a body that already declares). Which recipes accept a declaration
+    is the API's decision: since API 2026-11-17 it combines with any watermark and
+    fingerprint choice, and a watermark-only recipe is refused server side.
     """
 
     declared = kwargs.pop("ai_generated")
@@ -637,10 +636,6 @@ def _apply_ai_declaration(
         raise click.UsageError("'ai_declaration' conflicts with the explicit --ai-generated flag")
     if not companions["software_agent_name"]:
         raise click.UsageError("--ai-generated needs --software-agent NAME")
-    if body.get("watermark") is True:
-        raise click.UsageError(
-            f"{AI_MARK_REQUIRES_SIGN_ONLY}: use --no-watermark with --ai-generated"
-        )
     declaration = {
         "digital_source_type": companions["digital_source_type"] or AI_DIGITAL_SOURCE_TYPES[0],
         "software_agent_name": companions["software_agent_name"],
@@ -693,7 +688,6 @@ def _read_json_object(source: str | None, label: str) -> dict[str, Any] | None:
 
 __all__ = [
     "AI_DIGITAL_SOURCE_TYPES",
-    "AI_MARK_REQUIRES_SIGN_ONLY",
     "MAX_INPUT_BYTES",
     "OPERATIONS",
     "BodyFlagOption",

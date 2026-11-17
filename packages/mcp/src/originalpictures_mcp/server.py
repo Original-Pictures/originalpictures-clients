@@ -86,8 +86,6 @@ type MaxBillableOperations = Annotated[
 
 #: The public check's upload ceiling; the API refuses a larger file with 413.
 MAX_PUBLIC_CHECK_BYTES = 25 * 1024 * 1024
-#: The console's text for the combination the C2PA claim plan refuses.
-AI_MARK_REQUIRES_SIGN_ONLY = "AI-generated mark needs a sign-only call (C2PA claim plan)"
 #: ``_meta`` key carrying a billable tool's machine-readable cost preview.
 BILLING_META_KEY: Final = "com.originalpictures/billing"
 #: Where a caller reads the rates that price a billable operation.
@@ -770,7 +768,8 @@ def register_tools(
         """Sign one uploaded asset with a C2PA manifest (billable), after exact confirmation.
 
         Every job signs with C2PA; watermark and fingerprint choose what else it adds.
-        An AI declaration is accepted only with watermark false (C2PA claim plan).
+        An AI declaration combines with any watermark and fingerprint choice and with
+        creator_id, in one job.
         Cost preview: 1 to 3 billable operations on one file: the signature, plus the
         watermark when watermark is true, plus fingerprints when fingerprint is true
         (audio and video watermarks and fingerprints are priced per second). Rates:
@@ -779,8 +778,6 @@ def register_tools(
 
         if confirmation != f"sign:{asset_id}":
             raise ToolError("confirmation must exactly match sign:<asset_id>")
-        if ai_declaration is not None and watermark:
-            raise ToolError(f"{AI_MARK_REQUIRES_SIGN_ONLY}: send watermark false")
         check_spend(
             sign_operations(watermark=watermark, fingerprint=fingerprint),
             max_billable_operations,
@@ -926,7 +923,6 @@ def register_tools(
 
 
 __all__ = [
-    "AI_MARK_REQUIRES_SIGN_ONLY",
     "BILLABLE_WRITE_HINTS",
     "BILLING_META_KEY",
     "READ_ONLY_HINTS",

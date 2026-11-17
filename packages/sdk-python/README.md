@@ -156,15 +156,17 @@ the deployment supports for watermarking; `client.get_capabilities()` lists them
 
 ### 2. Declare AI generation (EU AI Act Article 50, SB 942)
 
-To declare that a generative model produced the file, add `ai_declaration` and keep
-`"watermark": False`. A watermark together with an AI declaration is refused with
-`JOB_POLICY_REJECTED` and `detail_code` `AI_DECLARATION_REQUIRES_SIGN_ONLY`.
+To declare that a generative model produced the file, add `ai_declaration`. It combines with any
+`watermark` and `fingerprint` choice and with `creator_id`, in one job. Only the watermark-only
+recipe (`rcp_system_watermark_only`), which writes no manifest, refuses it: 422
+`JOB_RECIPE_INVALID` with `detail_code` `AI_DECLARATION_REQUIRES_SIGN_ONLY`. Until 2026-11-17 the
+API also refused `"watermark": True` with a declaration.
 
 ```python
 job = client.accept_signing_job(
     body={
         "asset_id": asset_id,
-        "watermark": False,
+        "watermark": True,
         "fingerprint": True,
         "ai_declaration": {
             "software_agent_name": "Studio Nova Imagine",
@@ -309,8 +311,9 @@ see [Supported media](https://docs.originalpictures.com/introduction/).
 
 **Does a watermark replace C2PA?**
 No. C2PA records declared origin in metadata; the watermark and fingerprints help find your record
-again when that metadata has been stripped. A file declared as AI-generated is signed without a
-watermark.
+again when that metadata has been stripped. A file declared as AI-generated can carry a watermark
+too: for a file with no earlier Content Credentials its manifest records `c2pa.created`, then
+`c2pa.watermarked`.
 
 **Does this make me meet the EU AI Act or SB 942?**
 It produces machine-readable marking of the kind those laws describe. Whether your use meets an

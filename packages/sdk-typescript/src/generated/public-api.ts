@@ -2,7 +2,7 @@
 // Source: packages/contracts/openapi/openapi.yaml
 // Regenerate with: pnpm contracts:generate
 
-export const PUBLIC_API_OPENAPI_SHA256 = "dae3f9e07fda334eaeb7de8e2769869fd4074f4594501fc5b0eeab91b0bf9609"; // gitleaks:allow — deterministic public contract digest
+export const PUBLIC_API_OPENAPI_SHA256 = "086545509bef8d4f893146003fc9f15ad1a6e6f948aec20b6924273cfd6660ff"; // gitleaks:allow — deterministic public contract digest
 export const PUBLIC_API_VERSION = "1.0.0";
 
 export const PUBLIC_API_OPERATIONS = [

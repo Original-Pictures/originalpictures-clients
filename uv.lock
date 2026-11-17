@@ -680,7 +680,7 @@ wheels = [
 
 [[package]]
 name = "originalpictures-cli"
-version = "0.1.1"
+version = "0.2.0"
 source = { editable = "packages/cli-python" }
 dependencies = [
     { name = "click" },
@@ -739,7 +739,7 @@ requires-dist = [{ name = "httpx", specifier = "==0.28.1" }]
 
 [[package]]
 name = "originalpictures-mcp"
-version = "0.1.1"
+version = "0.2.0"
 source = { editable = "packages/mcp" }
 dependencies = [
     { name = "anyio" },
@@ -763,7 +763,7 @@ source = { editable = "packages/mcp-scopes" }
 
 [[package]]
 name = "originalpictures-sdk"
-version = "1.0.0"
+version = "1.1.0"
 source = { editable = "packages/sdk-python" }
 dependencies = [
     { name = "httpx" },

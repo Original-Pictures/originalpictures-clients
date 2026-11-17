@@ -7,7 +7,7 @@ import {
   describeVerifyError,
   formatUtc,
 } from "../src/core.ts";
-import { describeLimits, refusedBeforeUpload } from "../src/describe.ts";
+import { describeActions, describeLimits, refusedBeforeUpload } from "../src/describe.ts";
 import type { CredentialsStatus } from "../src/types.ts";
 import { STATEMENT, VERDICT_WORDS, completed } from "./fixtures.ts";
 
@@ -43,6 +43,37 @@ describe("describeResult", () => {
     expect(view.madeWith?.headline).toBe("Yes: Studio Nova's system has a record of this file");
     expect(view.madeWith?.detail).toBe("Its Content Credentials were signed for Studio Nova.");
     expect(view.statement).toBe(STATEMENT);
+  });
+
+  it("names a declared, watermarked generation's actions (declared plan v2)", () => {
+    // Since API 2026-11-17 an AI-declared job may also embed a watermark. Its manifest
+    // records c2pa.created, then c2pa.watermarked.bound when the watermark's soft
+    // binding (com.originalpictures.pixelseal.1 or .videoseal-image.1) is registered.
+    // The public check (op.public-check.v1) carries the action labels only, not the
+    // c2pa.soft-binding assertion, so "watermarked" is all the card can say.
+    expect(describeActions(["c2pa.created", "c2pa.watermarked.bound"])).toBe(
+      "created, watermarked",
+    );
+    expect(describeActions(["c2pa.created", "c2pa.watermarked"])).toBe("created, watermarked");
+    const view = describeResult(
+      completed({
+        content_credentials: {
+          status: "valid",
+          declared_origin: {
+            ...completed().content_credentials!.declared_origin!,
+            actions: ["c2pa.created", "c2pa.watermarked.bound"],
+          },
+        },
+      }),
+    );
+    expect(view.origin).toContainEqual({
+      label: "Recorded actions",
+      value: "created, watermarked",
+    });
+    expect(view.origin).toContainEqual({
+      label: "Declared as AI-generated",
+      value: "Yes, the signer declares it (trainedAlgorithmicMedia)",
+    });
   });
 
   it.each<CredentialsStatus>(["valid", "valid_untrusted", "invalid", "absent"])(

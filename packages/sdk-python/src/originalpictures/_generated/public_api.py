@@ -30,7 +30,7 @@ class PublicApiOperationContract:
 
 
 PUBLIC_API_OPENAPI_SHA256: Final = (
-    "dae3f9e07fda334eaeb7de8e2769869fd4074f4594501fc5b0eeab91b0bf9609"
+    "086545509bef8d4f893146003fc9f15ad1a6e6f948aec20b6924273cfd6660ff"
 )
 PUBLIC_API_VERSION: Final = "1.0.0"
 PUBLIC_API_OPERATIONS: Final[tuple[PublicApiOperationContract, ...]] = (

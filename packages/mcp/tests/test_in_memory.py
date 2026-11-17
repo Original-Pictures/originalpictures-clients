@@ -369,7 +369,7 @@ async def test_resource_template_uses_same_scope_gate_and_sdk_boundary(settings:
 
 
 @pytest.mark.asyncio
-async def test_sign_needs_confirmation_sends_flags_and_refuses_ai_with_watermark(
+async def test_sign_needs_confirmation_and_sends_ai_with_watermark_in_one_job(
     settings: Settings,
 ) -> None:
     fake = FakeClient(response={"job_id": "job_1", "state": "accepted"})
@@ -380,24 +380,17 @@ async def test_sign_needs_confirmation_sends_flags_and_refuses_ai_with_watermark
             await client.call_tool(
                 "sign", {**base, "watermark": False, "confirmation": "sign:other"}
             )
-        with pytest.raises(ToolError, match=r"needs a sign-only call \(C2PA claim plan\)"):
-            await client.call_tool(
-                "sign",
-                {
-                    **base,
-                    "watermark": True,
-                    "confirmation": "sign:ast_1",
-                    "ai_declaration": {"software_agent_name": "Imagine"},
-                },
-            )
         result = await client.call_tool(
             "sign",
             {
                 **base,
-                "watermark": False,
+                # Refused locally until 0.2.0 ("AI-generated mark needs a sign-only call");
+                # the API accepts a declaration with a watermark since 2026-11-17.
+                "watermark": True,
                 "confirmation": "sign:ast_1",
                 "fingerprint_algorithms": ["pdq"],
                 "ai_declaration": {"software_agent_name": "Imagine"},
+                "creator_id": "crid_1",
             },
         )
 
@@ -410,13 +403,14 @@ async def test_sign_needs_confirmation_sends_flags_and_refuses_ai_with_watermark
                 "headers": {"Idempotency-Key": "sign-1"},
                 "body": {
                     "asset_id": "ast_1",
-                    "watermark": False,
+                    "watermark": True,
                     "fingerprint": True,
                     "fingerprint_algorithms": ["pdq"],
                     "ai_declaration": {
                         "digital_source_type": "trainedAlgorithmicMedia",
                         "software_agent_name": "Imagine",
                     },
+                    "creator_id": "crid_1",
                 },
             },
         )

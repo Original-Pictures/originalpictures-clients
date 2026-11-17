@@ -51,7 +51,7 @@
     {
       "id": "sign",
       "name": "Sign media with Content Credentials",
-      "description": "Signs one image, audio or video file with a C2PA manifest, as POST /v1/sign. Send the file inline (at most 25 MB; needs the uploads:write scope too) or a data part naming an uploaded asset_id, plus watermark, fingerprint and ai_declaration options (an AI declaration is sign-only: watermark false). Needs sign:write. The task is the sign job; when it completes, the artifact carries a time-limited download link (needs assets:read).",
+      "description": "Signs one image, audio or video file with a C2PA manifest, as POST /v1/sign. Send the file inline (at most 25 MB; needs the uploads:write scope too) or a data part naming an uploaded asset_id, plus watermark, fingerprint and ai_declaration options (an AI declaration combines with any watermark and fingerprint choice). Needs sign:write. The task is the sign job; when it completes, the artifact carries a time-limited download link (needs assets:read).",
       "tags": ["c2pa", "content-credentials", "provenance", "watermark", "signing"],
       "examples": [
         "Sign this photo with Content Credentials only.",

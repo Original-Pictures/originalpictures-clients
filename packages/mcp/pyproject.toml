@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "originalpictures-mcp"
-version = "0.1.1"
+version = "0.2.0"
 description = "Sign media with C2PA Content Credentials and verify its declared origin."
 readme = "README.md"
 license = "Apache-2.0"
@@ -43,7 +43,7 @@ dependencies = [
   "anyio>=4.5",
   "fastmcp==3.4.10",
   "originalpictures-mcp-scopes==1.0.0",
-  "originalpictures-sdk==1.0.0",
+  "originalpictures-sdk==1.1.0",
 ]
 
 [project.urls]

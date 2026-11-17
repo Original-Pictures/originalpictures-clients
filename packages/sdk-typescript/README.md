@@ -157,7 +157,7 @@ the deployment supports for watermarking; `client.operations.getCapabilities()` 
 await client.operations.acceptSigningJob({
   body: {
     asset_id: upload.asset_id,
-    watermark: false,
+    watermark: true,
     fingerprint: true,
     ai_declaration: {
       software_agent_name: "Studio Nova Imagine",
@@ -169,8 +169,10 @@ await client.operations.acceptSigningJob({
 });
 ```
 
-An AI declaration is accepted only on a sign-only request: `watermark: true` with
-`ai_declaration` is refused with `JOB_POLICY_REJECTED` (`AI_DECLARATION_REQUIRES_SIGN_ONLY`).
+An AI declaration combines with any `watermark` and `fingerprint` choice and with `creator_id`, in
+one job. Only the watermark-only recipe (`rcp_system_watermark_only`), which writes no manifest,
+refuses it: 422 `JOB_RECIPE_INVALID` with `detail_code` `AI_DECLARATION_REQUIRES_SIGN_ONLY`. Until
+2026-11-17 the API also refused `watermark: true` with a declaration.
 
 ### 3. Download the signed file with integrity checks
 

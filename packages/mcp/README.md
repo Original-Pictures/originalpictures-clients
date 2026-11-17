@@ -112,8 +112,9 @@ claude mcp add originalpictures \
 | `sign`                                                             | `sign:write`         | Billable. Signs an uploaded `asset_id`; `watermark` and `fingerprint` are required flags. `confirmation` must be exactly `sign:<asset_id>`. |
 | `verify_public`                                                    | `verify:write`       | STDIO only. Reads one absolute local file (at most 25 MB, no symlinks) and checks it against a verify page `slug`, without the API key.     |
 
-`sign` refuses an `ai_declaration` together with `watermark: true` before calling the API:
-"AI-generated mark needs a sign-only call (C2PA claim plan)". Media is uploaded with the SDKs, the
+`sign` sends an `ai_declaration` with any `watermark`/`fingerprint` choice and with `creator_id`,
+in one job (since 0.2.0; 0.1.x refused it with `watermark: true`, following the API rule of that
+time). Media is uploaded with the SDKs, the
 CLI or the REST API; `sign` starts one billable operation for the signature, plus one each for the
 watermark and fingerprints when chosen.
 

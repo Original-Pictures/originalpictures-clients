@@ -1,6 +1,6 @@
 {
   "name": "@originalpictures/sdk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "description": "TypeScript SDK for C2PA Content Credentials: sign, invisibly watermark, fingerprint and verify media.",
   "keywords": [

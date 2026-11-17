@@ -304,17 +304,31 @@ def test_ai_generated_builds_the_declaration(runtime_factory, fake_client) -> No
     }
 
 
-def test_ai_generated_is_refused_locally_with_a_watermark(runtime_factory, fake_client) -> None:
+def test_ai_generated_combines_with_a_watermark_and_a_creator(runtime_factory, fake_client) -> None:
+    # Until API 2026-11-17 this combination was refused locally ("AI-generated mark
+    # needs a sign-only call"). The API now accepts it in one job, so the CLI sends it.
+    fake_client.responses["accept_signing_job"] = {"job_id": "job_1"}
+
     result = CliRunner().invoke(
         cli,
-        ["--json", "sign", "accept", "--asset", "ast_1", "--watermark"]
-        + ["--ai-generated", "--software-agent", "Imagine"],
+        ["--json", "sign", "accept", "--asset", "ast_1", "--watermark", "--fingerprint"]
+        + ["--creator", "crid_1", "--ai-generated", "--software-agent", "Imagine"],
         obj=runtime_factory(),
     )
 
-    assert result.exit_code == ExitCode.USAGE
-    assert "AI-generated mark needs a sign-only call (C2PA claim plan)" in result.stderr
-    assert fake_client.calls == []
+    assert result.exit_code == ExitCode.SUCCESS, result.stderr
+    assert "sign-only" not in result.stderr
+    _, _, kwargs = fake_client.calls[0]
+    assert kwargs["body"] == {
+        "asset_id": "ast_1",
+        "watermark": True,
+        "fingerprint": True,
+        "creator_id": "crid_1",
+        "ai_declaration": {
+            "digital_source_type": "trainedAlgorithmicMedia",
+            "software_agent_name": "Imagine",
+        },
+    }
 
 
 def test_ai_companions_need_ai_generated_and_a_software_agent(runtime_factory) -> None:

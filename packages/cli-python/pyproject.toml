@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "originalpictures-cli"
-version = "0.1.1"
+version = "0.2.0"
 description = "Command-line tool to sign media with C2PA Content Credentials, add invisible watermarks, and verify."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -45,7 +45,7 @@ classifiers = [
 dependencies = [
   "click==8.4.2",
   "keyring==25.7.0",
-  "originalpictures-sdk==1.0.0",
+  "originalpictures-sdk==1.1.0",
   "platformdirs==4.11.1",
   "rich==15.0.0",
 ]
